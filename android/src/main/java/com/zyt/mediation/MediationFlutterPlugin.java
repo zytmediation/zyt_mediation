@@ -65,7 +65,9 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         final MethodChannel bannerChannel = new MethodChannel(dartExecutor, P_BANNER);
         bannerChannel.setMethodCallHandler(new BannerPlugin(dartExecutor));
 
-        flutterPluginBinding.getPlatformViewRegistry().registerViewFactory(V_BANNER, new BannerPlatformViewFactory(StandardMessageCodec.INSTANCE));
+        flutterPluginBinding
+                .getPlatformViewRegistry().
+                registerViewFactory(V_BANNER, new BannerPlatformViewFactory(StandardMessageCodec.INSTANCE, dartExecutor));
     }
 
     /**

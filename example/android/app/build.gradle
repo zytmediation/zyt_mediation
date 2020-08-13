@@ -1,5 +1,5 @@
 def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
+def localPropertiesFile = rootProject.file('gradle.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
@@ -47,8 +47,7 @@ android {
             def file = output.outputFile
             def date = new Date().format("MMdd-HHmm", TimeZone.getTimeZone("GMT+08:00"))
             if (file != null && file.name.endsWith('.apk')) {
-                outputFileName = 'zyt-mediation-flutter' + "-" + "1.0.0" + "-" + date + ".apk"
-                //  output.outputFile 改为 outputFileName
+                outputFileName = 'zyt-mediation-flutter' + "-" + flutterVersionName + "-" + date + ".apk"
             }
         }
     }

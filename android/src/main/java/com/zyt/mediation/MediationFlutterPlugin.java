@@ -147,8 +147,6 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        Log.d("flutter log", "start activity");
-//        binding.getActivity().startActivity(new Intent(binding.getActivity(), MediationActivity.class));
         ComponentHolder.setUnity(true);
         ComponentHolder.setUnityActivity(binding.getActivity());
     }

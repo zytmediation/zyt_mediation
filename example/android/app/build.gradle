@@ -42,8 +42,22 @@ android {
         multiDexEnabled true
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def file = output.outputFile
+            def date = new Date().format("MMdd-HHmm", TimeZone.getTimeZone("GMT+08:00"))
+            if (file != null && file.name.endsWith('.apk')) {
+                outputFileName = 'zyt-mediation-flutter' + "-" + "1.0.0" + "-" + date + ".apk"
+                //  output.outputFile 改为 outputFileName
+            }
+        }
+    }
+
     buildTypes {
         release {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug

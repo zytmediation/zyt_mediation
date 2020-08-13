@@ -32,7 +32,6 @@ public class BannerPlugin extends BasePlugin {
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        Log.d("flutter log", "call:" + call.method);
         switch (call.method) {
             case M_BANNER_LOAD_AD:
                 load(call, result);

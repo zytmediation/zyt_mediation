@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mediation_flutter/reward.dart';
-import 'package:mediation_flutter/banner.dart';
-import 'package:mediation_flutter/interstitial.dart';
 import 'package:mediation_flutter/call_back.dart';
+import 'package:mediation_flutter/reward.dart';
 import 'package:mediation_flutter/zyt_mediation_sdk.dart';
 
 void main() {
@@ -17,7 +15,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin {
   TextEditingController initEditController = TextEditingController();
   TextEditingController rewardEditController = TextEditingController();
   TextEditingController interstitialEditController = TextEditingController();
@@ -28,12 +26,39 @@ class _MyAppState extends State<MyApp> {
   ScrollController _controller = ScrollController();
 
   @override
+  void dispose() {
+    print("life cycle:dispose");
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print("life cycle:didChangeDependencies");
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(MyApp oldWidget) {
+    print("life cycle:didUpdateWidget");
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void deactivate() {
+    print("life cycle:deactivate");
+    super.deactivate();
+  }
+
+  @override
   void initState() {
+    print("life cycle:initState");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    print("life cycle:build");
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -47,7 +72,7 @@ class _MyAppState extends State<MyApp> {
         buildBannerWidget(),
         buildSplashWidget(),
         buildClearLogBtn(),
-        buildBannerView(),
+//        buildBannerView(),
         buildLogListWidget(),
       ],
     ));
@@ -212,12 +237,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  BannerAd bannerAd;
+//  BannerAd bannerAd;
 
-  Widget buildBannerView() {
-    bannerAd = BannerAd("20000129");
-    return bannerAd;
-  }
+//  Widget buildBannerView() {
+//    bannerAd = BannerAd("8888");
+//    return bannerAd;
+//  }
 
   void initSdk() {
     addLog("init ${initEditController.text}");
@@ -261,29 +286,29 @@ class _MyAppState extends State<MyApp> {
   }
 
   void loadInterstitial() {
-    addLog("load interstitial ${interstitialEditController.text}");
-    Interstitial.load(
-        interstitialEditController.text,
-        InterstitialLoadCallBack(onLoaded: (adUnitId) {
-          addLog("interstitial load success $adUnitId");
-        }, onError: (adUnitId, errMsg) {
-          addLog("interstitial error $adUnitId,$errMsg");
-        }, onAdClick: (adUnitId) {
-          addLog("interstitial click $adUnitId");
-        }, onClose: (adUnitId) {
-          addLog("interstitial close $adUnitId");
-        }));
+//    addLog("load interstitial ${interstitialEditController.text}");
+//    Interstitial.load(
+//        interstitialEditController.text,
+//        InterstitialLoadCallBack(onLoaded: (adUnitId) {
+//          addLog("interstitial load success $adUnitId");
+//        }, onError: (adUnitId, errMsg) {
+//          addLog("interstitial error $adUnitId,$errMsg");
+//        }, onAdClick: (adUnitId) {
+////          addLog("interstitial click $adUnitId");
+//        }, onClose: (adUnitId) {
+////          addLog("interstitial close $adUnitId");
+//        }));
   }
 
   void isReadyInterstitial() {
-    Interstitial.isReady(interstitialEditController.text).then((value) {
-      addLog("interstitial is ready:$value");
-    });
+//    Interstitial.isReady(interstitialEditController.text).then((value) {
+//      addLog("interstitial is ready:$value");
+//    });
   }
 
   void showInterstitial() {
-    addLog("show interstitial ${interstitialEditController.text}");
-    Interstitial.show(interstitialEditController.text);
+//    addLog("show interstitial ${interstitialEditController.text}");
+//    Interstitial.show(interstitialEditController.text);
   }
 
   void jumpBottom() {
@@ -309,4 +334,7 @@ class _MyAppState extends State<MyApp> {
 //      addLog("banner error");
 //    }));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

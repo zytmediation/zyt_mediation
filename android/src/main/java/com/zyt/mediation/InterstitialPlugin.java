@@ -27,7 +27,6 @@ public class InterstitialPlugin extends BasePlugin {
         this.binaryMessenger = binaryMessenger;
     }
 
-
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         switch (call.method) {

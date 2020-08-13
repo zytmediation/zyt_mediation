@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:mediation_flutter/screen_util.dart';
 
 import 'call_back.dart';
 import 'constants.dart';
 
-class BannerAd extends StatefulWidget {
+class _BannerAd extends StatefulWidget {
   final String _adUnitId;
   final bool autoLoad;
   _BannerAdState bannerAdState;
 
-  BannerAd(this._adUnitId, {this.autoLoad = false}) {
+  _BannerAd(this._adUnitId, {this.autoLoad = false}) {
     bannerAdState = _BannerAdState(_adUnitId);
   }
 
@@ -28,13 +29,14 @@ class BannerAd extends StatefulWidget {
 //  }
 }
 
-class _BannerAdState extends State<BannerAd> {
-  static const MethodChannel _bannerChannel =
-      const MethodChannel(Constants.P_BANNER);
+class _BannerAdState extends State<_BannerAd> {
+//  static const MethodChannel _bannerChannel =
+//      const MethodChannel(Constants.P_BANNER);
   bool _loadSuccess = false;
   bool _show = true;
   String _adUnitId;
   final bool autoLoad;
+  double _height = 50;
 
   _BannerAdState(this._adUnitId, {this.autoLoad = false});
 
@@ -45,24 +47,40 @@ class _BannerAdState extends State<BannerAd> {
 
   Widget buildPlatformWidget() {
     return Container(
-      height: 50,
-      child: defaultTargetPlatform == TargetPlatform.android
-          ? AndroidView(
-              viewType: Constants.V_BANNER,
-              creationParams: {
-                Constants.A_AD_UNIT_ID: _adUnitId,
-              },
-              onPlatformViewCreated: _onPlatformViewCreated,
-              creationParamsCodec: StandardMessageCodec(),
-            )
-          : UiKitView(),
+      height: _height,
+      child: Center(
+        child: defaultTargetPlatform == TargetPlatform.android
+            ? AndroidView(
+                viewType: Constants.V_BANNER,
+                creationParams: {
+                  Constants.A_AD_UNIT_ID: _adUnitId,
+                },
+                onPlatformViewCreated: _onPlatformViewCreated,
+                creationParamsCodec: StandardMessageCodec(),
+              )
+            : UiKitView(),
+      ),
     );
   }
 
   _onPlatformViewCreated(int id) {
-    MethodChannel _adChannel = MethodChannel(Constants.V_BANNER + "/$id");
+    MethodChannel _adChannel = MethodChannel(Constants.P_BANNER + "/$id");
     _adChannel.setMethodCallHandler((call) {
-      print("flutter log:call:${call.method}");
+      print("flutter log:call ${call.method}");
+      print("flutter log:call ${call.arguments[Constants.WIDTH]}");
+      print("flutter log:call ${call.arguments[Constants.HEIGHT]}");
+      switch (call.method) {
+        case Constants.C_ON_LAYOUT_CHANGE:
+          setState(() {
+            _height = ScreenUtil.SCREEN_WIDTH *
+                call.arguments[Constants.HEIGHT] /
+                call.arguments[Constants.WIDTH];
+            if (_height <= 0) {
+              _height = 50;
+            }
+          });
+          break;
+      }
     });
   }
 //

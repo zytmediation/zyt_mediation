@@ -47,8 +47,6 @@ class Constants {
   static const String C_BANNER_ON_AD_CLOSE = "onAdClose";
   static const String C_BANNER_ON_ERROR = "onError";
 
-  static const String C_ON_LAYOUT_CHANGE = "onLayoutChange";
-
   static const String V_BANNER = "bannerView";
   static const String V_NATIVE = "nativeView";
   static const String V_SPLASH = "splashView";
@@ -58,4 +56,7 @@ class Constants {
   static const String A_CHANNEL_ID = "channelId";
   static const String A_ERR_MSG = "errMsg";
   static const String A_REWARD = "reward";
+  static const String WIDTH = "width";
+  static const String HEIGHT = "height";
+  static const String C_ON_LAYOUT_CHANGE = "onLayoutChange";
 }

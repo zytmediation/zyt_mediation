@@ -4,15 +4,26 @@
 
 1. 添加依赖
 
-```yaml
-dependencies:
-  zyt_mediation:
-    git:
-      url: https://github.com/zytmediation/zyt_mediation_flutter.git
-      ref: v1.0.0
-```
+   ```yaml
+   dependencies:
+     zyt_mediation:
+       git:
+         url: https://github.com/zytmediation/zyt_mediation_flutter.git
+         ref: v1.0.0
+   ```
 
 2. 初始化
+
+   ```dart
+   ZYTMediationSdk.initialize(appId, pubKey,
+       initCallBack: InitCallBack(onInitSuccess: () {
+         print("init success");
+       }, onInitFailure: () {
+         print("init failure");
+       }));
+   ```
+
+   ps：尽早调用初始化方法，建议在 MyApp 的 build()方法中初始化。
 
 3. 激励视频
 
@@ -55,19 +66,19 @@ dependencies:
 
 - Android
   - appId: 1000
-  - pubKey: ""
+  - pubKey: 5f02f0acf05577031536bbda323f7faa
   - 激励视频 adUnitId: 20000128
 - IOS 暂无
 
-**PS：以上 appId 和 adUnitId 需要自行判断不同平台，例如：（flutter zyt_mediation-1.0.0 只支持 android 平台，ios 平台 adUnitId 可暂时不填）**
+  **PS：以上 appId 和 adUnitId 需要自行判断不同平台，例如：（flutter zyt_mediation-1.0.0 只支持 android 平台，ios 平台 adUnitId 可暂时不填）**
 
-```dart
-String getRewardAdUnitId() {
-  if (Platform.isIOS) {
-    return '填写您的ios adUnitId';
-  } else if (Platform.isAndroid) {
-    return '填写您的android adUnitId';
+  ```dart
+  String getRewardAdUnitId() {
+    if (Platform.isIOS) {
+      return '填写您的ios adUnitId';
+    } else if (Platform.isAndroid) {
+      return '填写您的android adUnitId';
+    }
+    return null;
   }
-  return null;
-}
-```
+  ```

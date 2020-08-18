@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mediation_flutter/call_back.dart';
-import 'package:mediation_flutter/reward.dart';
-import 'package:mediation_flutter/zyt_mediation_sdk.dart';
+import 'package:zyt_mediation/call_back.dart';
+import 'package:zyt_mediation/reward.dart';
+import 'package:zyt_mediation/zyt_mediation.dart';
 
 void main() {
   runApp(MyApp());

@@ -73,8 +73,8 @@ class Reward {
     });
   }
 
-  static Future<bool> isReady(String adUnitId) {
-    final Future<bool> result = _rewardChannel
+  static Future<bool> isReady(String adUnitId) async {
+    final bool result = await _rewardChannel
         .invokeMethod(Constants.M_REWARD_IS_READY, <String, dynamic>{
       Constants.A_AD_UNIT_ID: adUnitId,
     });

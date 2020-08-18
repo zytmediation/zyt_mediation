@@ -6,7 +6,9 @@
 
 ```yaml
 dependencies:
-  zyt_mediation: "^1.0.0"
+  zyt_mediation:
+    git:
+      url: https://github.com/zytmediation/zyt_mediation_flutter.git
 ```
 
 2. 初始化

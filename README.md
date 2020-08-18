@@ -9,6 +9,7 @@ dependencies:
   zyt_mediation:
     git:
       url: https://github.com/zytmediation/zyt_mediation_flutter.git
+      ref: v1.0.0
 ```
 
 2. 初始化

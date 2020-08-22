@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.zyt:mediation-base:1.3.5'
     implementation 'com.zyt:mediation-zyt:1.3.5'
     implementation 'com.zyt:mediation-tt:3.0.0.4.1'
-    implementation 'com.zyt:mediation-gdt:4.191.1061.1'
+    implementation 'com.zyt:mediation-gdt:4.191.1061.2'
     implementation 'com.zyt:mediation-ks:2.6.5.2.1'
     implementation 'com.zyt:mediation-baidu:5.88.1'
     implementation 'com.zyt:mediation-tuia:2.0.1.0.1'

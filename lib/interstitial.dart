@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'call_back.dart';
 import 'constants.dart';
 
-class _Interstitial {
+class Interstitial {
   static const MethodChannel _interstitialChannel =
       const MethodChannel(Constants.P_INTERSTITIAL);
 

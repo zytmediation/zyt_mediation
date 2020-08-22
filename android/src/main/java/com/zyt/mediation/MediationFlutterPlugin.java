@@ -1,11 +1,16 @@
 package com.zyt.mediation;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -19,6 +24,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.StandardMessageCodec;
 import mobi.android.ZYTMediationSDK;
 import mobi.android.base.ComponentHolder;
+import mobi.android.dsp.DspInterstitialByNativeActivity;
 
 /**
  * MediationFlutterPlugin
@@ -26,6 +32,9 @@ import mobi.android.base.ComponentHolder;
 public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel channel;
     private Context mContext;
+    private Activity mActivity;
+    private Method onResumeMethod;
+    private Field field;
 
     public MediationFlutterPlugin() {
     }
@@ -43,12 +52,16 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         this.mContext = mContext;
     }
 
+    public MediationFlutterPlugin(MethodChannel channel, Context mContext, Activity mActivity) {
+        this.channel = channel;
+        this.mContext = mContext;
+        this.mActivity = mActivity;
+    }
+
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         DartExecutor dartExecutor = flutterPluginBinding.getFlutterEngine().getDartExecutor();
         mContext = flutterPluginBinding.getApplicationContext();
-
-//        mContext.startActivity(new Intent(mContext, MediationActivity.class));
 
         channel = new MethodChannel(dartExecutor, P_MEDIATION_FLUTTER);
         channel.setMethodCallHandler(this);
@@ -71,6 +84,7 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         flutterPluginBinding
                 .getPlatformViewRegistry().
                 registerViewFactory(V_NATIVE, new NativePlatformViewFactory(StandardMessageCodec.INSTANCE, dartExecutor));
+        observerInterstitialNativeActivity(mContext);
     }
 
     /**
@@ -81,7 +95,7 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         ComponentHolder.setUnityActivity(registrar.activity());
         BinaryMessenger messenger = registrar.messenger();
         final MethodChannel channel = new MethodChannel(messenger, P_MEDIATION_FLUTTER);
-        channel.setMethodCallHandler(new MediationFlutterPlugin(channel, registrar.context()));
+        channel.setMethodCallHandler(new MediationFlutterPlugin(channel, registrar.context(), registrar.activity()));
 
         // reward channel
         final MethodChannel rewardChannel = new MethodChannel(messenger, P_REWARD);
@@ -106,6 +120,7 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+        removeObserver(mContext);
     }
 
     /**
@@ -152,6 +167,8 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         ComponentHolder.setUnity(true);
         ComponentHolder.setUnityActivity(binding.getActivity());
+
+        mActivity = binding.getActivity();
     }
 
     @Override
@@ -166,6 +183,131 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
 
     @Override
     public void onDetachedFromActivity() {
+    }
 
+    private void invoke(Activity activity) {
+        if (activity == null) {
+            return;
+        }
+        try {
+            Field field = refDelegateByFlutterActivity(activity.getClass());
+            Method method = refOnResumeMethod();
+            if (field != null && method != null) {
+                method.invoke(field.get(activity));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (Exception ignored) {
+        }
+    }
+
+    private Field refDelegateByFlutterActivity(Class<?> clazz) {
+        if (field != null) {
+            return field;
+        }
+        Field[] fields = clazz.getFields();
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field != null && "delegate".equals(field.getName())) {
+                field.setAccessible(true);
+                this.field = field;
+                return field;
+            }
+        }
+        for (Field field : declaredFields) {
+            if (field != null && "delegate".equals(field.getName())) {
+                field.setAccessible(true);
+                this.field = field;
+                return field;
+            }
+        }
+        Class<?> superclass = clazz.getSuperclass();
+        if (superclass != null) {
+            return refDelegateByFlutterActivity(superclass);
+        }
+        return null;
+    }
+
+    private Method refOnResumeMethod() {
+        if (onResumeMethod != null) {
+            return onResumeMethod;
+        }
+        Class<?> aClass = null;
+        try {
+            aClass = Class.forName("io.flutter.embedding.android.FlutterActivityAndFragmentDelegate");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (aClass != null) {
+            try {
+                onResumeMethod = aClass.getDeclaredMethod("onResume");
+                onResumeMethod.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (Exception ignored) {
+            }
+        }
+        return onResumeMethod;
+    }
+
+    Application.ActivityLifecycleCallbacks activityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+            if (activity instanceof DspInterstitialByNativeActivity) {
+                invoke(mActivity);
+            }
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+
+        }
+    };
+
+    private void observerInterstitialNativeActivity(Context context) {
+        if (context == null) {
+            return;
+        }
+        Context applicationContext = context.getApplicationContext();
+        if (applicationContext instanceof Application) {
+            ((Application) applicationContext).registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        }
+    }
+
+    private void removeObserver(Context context) {
+        if (context == null) {
+            return;
+        }
+        Context applicationContext = context.getApplicationContext();
+        if (applicationContext instanceof Application) {
+            ((Application) applicationContext).unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        }
     }
 }

@@ -1,0 +1,2 @@
+-keep class io.flutter.embedding.android.FlutterActivityAndFragmentDelegate { *; }
+-keep class io.flutter.embedding.android.FlutterActivity { *; }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:mediation_flutter_example/native_example_page.dart';
 import 'package:zyt_mediation/banner.dart';
 import 'package:zyt_mediation/call_back.dart';
+import 'package:zyt_mediation/interstitial.dart';
 import 'package:zyt_mediation/reward.dart';
 import 'package:zyt_mediation/zyt_mediation.dart';
 
@@ -217,12 +218,14 @@ class HomePageState extends State<HomePage> {
     setState(() {
       list.insert(
           0,
-          BannerAd(bannerEditController.text,
-              bannerCallBack: BannerCallBack(
-                  onLoaded: (_) => addLog("banner load success"),
-                  onClose: (_) => addLog("banner close"),
-                  onError: (_, errMsg) => addLog("banner error:$errMsg"),
-                  onAdClick: (_) => addLog("banner click"))));
+          Container(
+              color: Colors.amber,
+              child: BannerAd(bannerEditController.text,
+                  bannerCallBack: BannerCallBack(
+                      onLoaded: (_) => addLog("banner load success"),
+                      onClose: (_) => addLog("banner close"),
+                      onError: (_, errMsg) => addLog("banner error:$errMsg"),
+                      onAdClick: (_) => addLog("banner click")))));
     });
   }
 
@@ -235,29 +238,29 @@ class HomePageState extends State<HomePage> {
   }
 
   loadInterstitial() {
-//    addLog("load interstitial ${interstitialEditController.text}");
-//    Interstitial.load(
-//        interstitialEditController.text,
-//        InterstitialLoadCallBack(onLoaded: (adUnitId) {
-//          addLog("interstitial load success $adUnitId");
-//        }, onError: (adUnitId, errMsg) {
-//          addLog("interstitial error $adUnitId,$errMsg");
-//        }, onAdClick: (adUnitId) {
-////          addLog("interstitial click $adUnitId");
-//        }, onClose: (adUnitId) {
-////          addLog("interstitial close $adUnitId");
-//        }));
+    addLog("load interstitial ${interstitialEditController.text}");
+    Interstitial.load(
+        interstitialEditController.text,
+        InterstitialLoadCallBack(onLoaded: (adUnitId) {
+          addLog("interstitial load success $adUnitId");
+        }, onError: (adUnitId, errMsg) {
+          addLog("interstitial error $adUnitId,$errMsg");
+        }, onAdClick: (adUnitId) {
+          addLog("interstitial click $adUnitId");
+        }, onClose: (adUnitId) {
+          addLog("interstitial close $adUnitId");
+        }));
   }
 
   isReadyInterstitial() {
-//    Interstitial.isReady(interstitialEditController.text).then((value) {
-//      addLog("interstitial is ready:$value");
-//    });
+    Interstitial.isReady(interstitialEditController.text).then((value) {
+      addLog("interstitial is ready:$value");
+    });
   }
 
   showInterstitial() {
-//    addLog("show interstitial ${interstitialEditController.text}");
-//    Interstitial.show(interstitialEditController.text);
+    addLog("show interstitial ${interstitialEditController.text}");
+    Interstitial.show(interstitialEditController.text);
   }
 
   addLog(String log) {

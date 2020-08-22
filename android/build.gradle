@@ -33,6 +33,14 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'consumer-proguard-rules.pro'
+        }
+    }
+
 }
 dependencies {
     implementation 'com.zyt:mediation-base:1.3.5'

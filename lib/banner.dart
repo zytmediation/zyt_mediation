@@ -31,7 +31,7 @@ class _BannerAdState extends State<BannerAd> {
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.center,
-        width: 320,
+        width: ScreenUtil.SCREEN_WIDTH,
         height: 50,
         child: Center(child: buildPlatformWidget()));
   }

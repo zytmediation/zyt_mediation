@@ -68,6 +68,9 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         flutterPluginBinding
                 .getPlatformViewRegistry().
                 registerViewFactory(V_BANNER, new BannerPlatformViewFactory(StandardMessageCodec.INSTANCE, dartExecutor));
+        flutterPluginBinding
+                .getPlatformViewRegistry().
+                registerViewFactory(V_NATIVE, new NativePlatformViewFactory(StandardMessageCodec.INSTANCE, dartExecutor));
     }
 
     /**

@@ -19,13 +19,11 @@ class ZYTMediationSdk {
       switch (call.method) {
         case Constants.C_INITIALIZE_SUCCESS:
           if (initCallBack.onInitSuccess != null) {
-            print("flutter log:init success");
             initCallBack.onInitSuccess();
           }
           break;
         case Constants.C_INITIALIZE_FAILURE:
           if (initCallBack.onInitFailure != null) {
-            print("flutter log:init failure");
             initCallBack.onInitFailure();
           }
           break;

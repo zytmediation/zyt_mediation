@@ -97,7 +97,6 @@ public class BannerPlugin extends BasePlugin {
         if (bannerAdResponse != null && container != null) {
             bannerAdResponseMap.remove(bannerAdResponse);
             bannerAdResponse.show(container);
-            Log.d("flutter log", "==================show banner");
         }
     }
 }

@@ -47,6 +47,16 @@ class Constants {
   static const String C_BANNER_ON_AD_CLOSE = "onAdClose";
   static const String C_BANNER_ON_ERROR = "onError";
 
+  // native插件名和方法名
+  static const String P_NATIVE = P_MEDIATION_FLUTTER + "/native";
+  static const String M_NATIVE_LOAD_AD = "loadAd";
+
+  // NATIVE加载回调
+  static const String C_NATIVE_ON_AD_LOADED = "onAdLoaded";
+  static const String C_NATIVE_ON_AD_CLICK = "onAdClick";
+  static const String C_NATIVE_ON_AD_CLOSE = "onAdClose";
+  static const String C_NATIVE_ON_ERROR = "onError";
+
   static const String V_BANNER = "bannerView";
   static const String V_NATIVE = "nativeView";
   static const String V_SPLASH = "splashView";

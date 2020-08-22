@@ -7,7 +7,7 @@ class ScreenUtil {
   static final double SCREEN_HEIGHT =
       MediaQueryData.fromWindow(window).size.height;
 
-  static double px2dp(double pxValue) {
+  static px2dp(var pxValue) {
     return pxValue / window.devicePixelRatio;
   }
 }

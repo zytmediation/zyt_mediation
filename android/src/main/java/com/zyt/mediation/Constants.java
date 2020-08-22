@@ -55,6 +55,18 @@ public interface Constants {
     String C_BANNER_ON_AD_CLOSE = "onAdClose";
     String C_BANNER_ON_ERROR = "onError";
 
+
+    // native插件名和方法名
+    String P_NATIVE = P_MEDIATION_FLUTTER + "/native";
+    String M_NATIVE_LOAD_AD = "loadAd";
+
+    // NATIVE加载回调
+    String C_NATIVE_ON_AD_LOADED = "onAdLoaded";
+    String C_NATIVE_ON_AD_CLICK = "onAdClick";
+    String C_NATIVE_ON_AD_CLOSE = "onAdClose";
+    String C_NATIVE_ON_ERROR = "onError";
+
+
     String C_ON_LAYOUT_CHANGE = "onLayoutChange";
 
     String V_BANNER = "bannerView";

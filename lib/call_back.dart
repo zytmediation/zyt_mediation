@@ -35,14 +35,23 @@ class InterstitialLoadCallBack {
 }
 
 /// banner加载回调
-class BannerLoadCallBack {
+class BannerCallBack {
   OnLoaded onLoaded;
   OnError onError;
   OnClose onClose;
   OnAdClick onAdClick;
 
-  BannerLoadCallBack(
-      {this.onLoaded, this.onError, this.onClose, this.onAdClick});
+  BannerCallBack({this.onLoaded, this.onError, this.onClose, this.onAdClick});
+}
+
+/// native回调
+class NativeCallBack {
+  OnLoaded onLoaded;
+  OnError onError;
+  OnClose onClose;
+  OnAdClick onAdClick;
+
+  NativeCallBack({this.onLoaded, this.onError, this.onClose, this.onAdClick});
 }
 
 typedef OnLoaded = void Function(String adUnitId);

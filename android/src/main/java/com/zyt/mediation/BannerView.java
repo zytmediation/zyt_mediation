@@ -2,11 +2,13 @@ package com.zyt.mediation;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -24,34 +26,27 @@ import mobi.android.BannerAd;
  */
 public class BannerView implements PlatformView, Constants {
     private Map<String, Object> argMap;
-    private RelativeLayout adContainer;
+    private LinearLayout adContainer;
     private int viewId;
     private MethodChannel adMethodChannel;
     private BinaryMessenger binaryMessenger;
+    private boolean isShow = false;
 
     public BannerView(Context context, int viewId, BinaryMessenger binaryMessenger, Map<String, Object> argMap) {
         this.argMap = argMap;
         this.viewId = viewId;
         this.binaryMessenger = binaryMessenger;
-        adContainer = new RelativeLayout(context);
-        adContainer.setBackgroundColor(Color.BLUE);
+        adContainer = new LinearLayout(context);
+        adContainer.setGravity(Gravity.CENTER);
+        adContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
-
-    Handler handler = new Handler();
 
     @Override
     public View getView() {
         final Object adUnitAd = argMap.get(A_AD_UNIT_ID);
-        if (adUnitAd instanceof String && !TextUtils.isEmpty((CharSequence) adUnitAd)) {
-//            BannerPlugin.show((String) adUnitAd, adContainer);
+        if (adUnitAd instanceof String && !TextUtils.isEmpty((CharSequence) adUnitAd) && !isShow && adMethodChannel == null) {
             initChannel();
-            handler.removeCallbacksAndMessages(null);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadBanner((String) adUnitAd);
-                }
-            }, 15000);
+            loadBanner((String) adUnitAd);
         }
         return adContainer;
     }
@@ -61,29 +56,13 @@ public class BannerView implements PlatformView, Constants {
     }
 
     private void loadBanner(final String adUnitId) {
-        Log.d("flutter log", "load banner:" + adUnitId);
         BannerAd.loadAd(adUnitId, new BannerAdListener() {
             @Override
             public void onAdLoaded(String s, BannerAdResponse bannerAdResponse) {
-//                bannerAdResponse.show(adContainer);
-                final LinearLayout linearLayout = new LinearLayout(adContainer.getContext());
-                linearLayout.setGravity(Gravity.CENTER);
-                bannerAdResponse.show(linearLayout);
-                linearLayout.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.AT_MOST),
-                        View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.AT_MOST));
-                adMethodChannel.invokeMethod(C_ON_LAYOUT_CHANGE, new MapBuilder<String, Integer>()
-                        .put(WIDTH, linearLayout.getMeasuredWidth())
-                        .put(HEIGHT, linearLayout.getMeasuredHeight())
-                        .build());
-
+                isShow = true;
                 adContainer.removeAllViews();
-                adContainer.addView(linearLayout);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadBanner(adUnitId);
-                    }
-                }, 10000);
+                bannerAdResponse.show(adContainer);
+                adMethodChannel.invokeMethod(C_BANNER_ON_AD_LOADED, MapBuilder.of(A_AD_UNIT_ID, s));
             }
 
             @Override
@@ -98,12 +77,6 @@ public class BannerView implements PlatformView, Constants {
 
             @Override
             public void onError(String s, String s1) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadBanner(adUnitId);
-                    }
-                }, 3000);
                 adMethodChannel.invokeMethod(C_BANNER_ON_ERROR,
                         new MapBuilder<String, String>()
                                 .put(A_AD_UNIT_ID, s)
@@ -117,7 +90,6 @@ public class BannerView implements PlatformView, Constants {
     public void dispose() {
         if (adContainer != null) {
             adContainer.setVisibility(View.GONE);
-            adContainer = null;
         }
     }
 }

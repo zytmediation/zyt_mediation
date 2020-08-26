@@ -9,7 +9,7 @@
      zyt_mediation:
        git:
          url: https://github.com/zytmediation/zyt_mediation_flutter.git
-         ref: v1.0.0
+         ref: v1.1.0
    ```
 
 2. 初始化
@@ -29,37 +29,89 @@
 
    - 加载
 
-   ```dart
-   String adUnitId="此处填写您的adUnitId";
-   Reward.load(
-       adUnitId,
-       RewardLoadCallBack(
-       onLoaded: (adUnitId) {
-           print("load reward success $adUnitId");
-       },
-       onError: (adUnitId, errMsg) {
-           print("load reward error $adUnitId,$errMsg");
-       }));
-   ```
+     ```dart
+     Reward.load(
+         "此处填写您的adUnitId",
+         RewardLoadCallBack(
+         onLoaded: (adUnitId) {
+             print("load reward success $adUnitId");
+         },
+         onError: (adUnitId, errMsg) {
+             print("load reward error $adUnitId,$errMsg");
+         }));
+     ```
 
    - 展示
 
-   ```dart
-   String adUnitId="此处填写您的adUnitId";
+     ```dart
      Reward.show(
-        adUnitId,
-        RewardShowCallBack(
-          onAdClick: (adUnitId) {
-            print("reward click $adUnitId");
-          },
-          onAdFinish: (adUnitId, reward) {
-            // 根据reward判断视频是否观看完成
-            print("reward finish $adUnitId,reward:$reward");
-          },
-          onAdShow: (adUnitId) {
-            print("reward show $adUnitId");
-          },
-        ));
+       "此处填写您的adUnitId",
+       RewardShowCallBack(
+         onAdClick: (adUnitId) {
+           print("reward click $adUnitId");
+         },
+         onAdFinish: (adUnitId, reward) {
+           // 根据reward判断视频是否观看完成
+           print("reward finish $adUnitId,reward:$reward");
+         },
+         onAdShow: (adUnitId) {
+           print("reward show $adUnitId");
+         },
+       ));
+     ```
+
+4. 插屏广告
+
+   - 加载
+
+     ```dart
+     Interstitial.load(
+             "此处填写您的adUnitId",
+             InterstitialLoadCallBack(onLoaded: (adUnitId) {
+               print("interstitial load success $adUnitId");
+             }, onError: (adUnitId, errMsg) {
+               print("interstitial error $adUnitId,$errMsg");
+             }, onAdClick: (adUnitId) {
+               print("interstitial click $adUnitId");
+             }, onClose: (adUnitId) {
+               print("interstitial close $adUnitId");
+             }));
+     ```
+
+   - 展示
+
+     ```dart
+     Interstitial.show("此处填写您的adUnitId");
+     ```
+
+5. 原生广告
+
+   ```dart
+   /// 直接构建NativeAd widget放入布局中即可
+   NativeAd(
+         "此处填写您的adUnitId",
+         nativeCallBack: NativeCallBack(
+             onLoaded: (_) => print("load success"),
+             onAdClick: (_) => print("native click"),
+             onClose: (_) => print("native close"),
+             onError: (_, errMsg) => print("native error:$errMsg")
+         )
+       )
+   ```
+
+6. 横幅广告
+
+   ```dart
+   /// 直接构建BannerAd widget放入布局中即可
+   BannerAd(
+     "此处填写您的adUnitId",
+     bannerCallBack: BannerCallBack(
+       onLoaded: (_) => print("banner load success"),
+       onClose: (_) => print("banner close"),
+       onError: (_, errMsg) => print("banner error:$errMsg"),
+       onAdClick: (_) => print("banner click")
+     )
+   )
    ```
 
 ## 测试 key（仅用于测试使用）
@@ -68,17 +120,20 @@
   - appId: 1000
   - pubKey: 5f02f0acf05577031536bbda323f7faa
   - 激励视频 adUnitId: 20000128
+  - 插屏广告 adUnitId: 20000127
+  - 原生广告 adUnitId: 20000130
+  - 横幅广告 adUnitId: 20000129
 - IOS 暂无
 
-  **PS：以上 appId 和 adUnitId 需要自行判断不同平台，例如：（flutter zyt_mediation-1.0.0 只支持 android 平台，ios 平台 adUnitId 可暂时不填）**
+**PS：以上 appId 和 adUnitId 需要自行判断不同平台，例如：（flutter zyt_mediation-1.1.0 只支持 android 平台，ios 平台 adUnitId 可暂时不填）**
 
-  ```dart
-  String getRewardAdUnitId() {
-    if (Platform.isIOS) {
-      return '填写您的ios adUnitId';
-    } else if (Platform.isAndroid) {
-      return '填写您的android adUnitId';
-    }
-    return null;
+```dart
+String getRewardAdUnitId() {
+  if (Platform.isIOS) {
+    return '填写您的ios adUnitId';
+  } else if (Platform.isAndroid) {
+    return '填写您的android adUnitId';
   }
-  ```
+  return null;
+}
+```

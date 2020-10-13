@@ -48,7 +48,7 @@ android {
             def file = output.outputFile
             def date = new Date().format("MMdd-HHmm", TimeZone.getTimeZone("GMT+08:00"))
             if (file != null && file.name.endsWith('.apk')) {
-                outputFileName = '../../../../../../package/zyt-mediation-flutter' + "-" + flutterVersionName + "-" + date + ".apk"
+                outputFileName = "../../../../../../package/zyt-mediation-flutter-${flutterVersionName}-${date}.apk "
             }
         }
     }

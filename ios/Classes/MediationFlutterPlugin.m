@@ -1,4 +1,5 @@
 #import "MediationFlutterPlugin.h"
+#import <ZYTSDK/ZYTSDK.h>
 
 @implementation MediationFlutterPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -10,11 +11,23 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"getPlatformVersion" isEqualToString:call.method]) {
-    result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+
+  if ([@"initialize" isEqualToString:call.method]) {
+
+//      self zytMediationInitialize:call.arguments pubkey:<#(NSString *)#> flutterResult:<#^(id  _Nullable result)result#>
+      NSLog(@"%@",call);
+
   } else {
     result(FlutterMethodNotImplemented);
   }
+}
+
+
+- (void)zytMediationInitialize:(NSString *)appid
+                        pubkey:(NSString *)pubKey
+                 flutterResult:(FlutterResult)result
+{
+    
 }
 
 @end

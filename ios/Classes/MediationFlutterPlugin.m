@@ -1,21 +1,31 @@
 #import "MediationFlutterPlugin.h"
 #import <ZYTSDK/ZYTSDK.h>
+@interface MediationFlutterPlugin()
+
+@property (nonatomic, strong) FlutterMethodChannel *channel;
+
+@end
+
 
 @implementation MediationFlutterPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
+    FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"mediation_flutter"
             binaryMessenger:[registrar messenger]];
-  MediationFlutterPlugin* instance = [[MediationFlutterPlugin alloc] init];
-  [registrar addMethodCallDelegate:instance channel:channel];
+    MediationFlutterPlugin* instance = [[MediationFlutterPlugin alloc] init];
+    instance.channel = channel;
+    [registrar addMethodCallDelegate:instance channel:channel];
+
+    
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
 
   if ([@"initialize" isEqualToString:call.method]) {
 
-//      self zytMediationInitialize:call.arguments pubkey:<#(NSString *)#> flutterResult:<#^(id  _Nullable result)result#>
-      NSLog(@"%@",call);
+      [self zytMediationInitialize:call.arguments[@"appId"]
+                            pubkey:call.arguments[@"pubKey"]
+                     flutterResult:result];
 
   } else {
     result(FlutterMethodNotImplemented);
@@ -27,7 +37,18 @@
                         pubkey:(NSString *)pubKey
                  flutterResult:(FlutterResult)result
 {
+    [ZYTSDK setLogLevel:ZYTLogLevelDebug];
     
+    [ZYTSDK initWithAppID:appid pubKey:pubKey completion:^(BOOL success) {
+       
+        
+        if (success) {
+            [self.channel invokeMethod:@"initSuccess" arguments:nil];
+        } else {
+            [self.channel invokeMethod:@"initFailure" arguments:nil];
+        }
+        
+    }];
 }
 
 @end

@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  TextEditingController initEditController = TextEditingController();
+  TextEditingController initAppIdController = TextEditingController();
+  TextEditingController initAppKeyController = TextEditingController();
   TextEditingController rewardEditController = TextEditingController();
   TextEditingController interstitialEditController = TextEditingController();
   TextEditingController bannerEditController = TextEditingController();
@@ -44,7 +45,9 @@ class HomePageState extends State<HomePage> {
 
   Widget buildInitWidget() {
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      Expanded(flex: 1, child: buildTextField(initEditController)),
+      
+      Expanded(flex: 1, child: buildTextField(initAppIdController,"appid")),
+      Expanded(flex: 1, child: buildTextField(initAppKeyController,"appkey")),
       Expanded(
         flex: 1,
         child: RaisedButton(
@@ -161,21 +164,24 @@ class HomePageState extends State<HomePage> {
     return Text(msg);
   }
 
-  Widget buildTextField(TextEditingController controller) {
+  Widget buildTextField(TextEditingController controller, [String hintText]) {
     return TextField(
       controller: controller,
-      maxLength: 10,
       maxLines: 1,
-      inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-      keyboardType: TextInputType.number,
+      // inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+      keyboardType: TextInputType.text,
       decoration:
-          InputDecoration(contentPadding: EdgeInsets.all(0), counterText: ''),
+          InputDecoration(
+              contentPadding: EdgeInsets.all(0),
+              counterText: '',
+              hintText: hintText
+          ),
     );
   }
 
   initSdk() {
-    addLog("init ${initEditController.text}");
-    ZYTMediationSdk.initialize(initEditController.text, "",
+    addLog("init ${initAppIdController.text}");
+    ZYTMediationSdk.initialize(initAppIdController.text, initAppKeyController.text,
         initCallBack: InitCallBack(
             onInitSuccess: () => addLog("init success"),
             onInitFailure: () => addLog("init failure")));

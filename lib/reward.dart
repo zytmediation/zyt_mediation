@@ -33,8 +33,8 @@ class Reward {
     }
     await _rewardChannel
         .invokeMethod(Constants.M_REWARD_LOAD_AD, <String, dynamic>{
-      Constants.A_AD_UNIT_ID: adUnitId,
-      Constants.A_CHANNEL_ID: channelId,
+      Constants.A_AD_UNIT_ID: adUnitId.toString(),
+      Constants.A_CHANNEL_ID: channelId.toString(),
     });
   }
 

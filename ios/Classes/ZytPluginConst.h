@@ -18,4 +18,10 @@ static const NSString *kRewardLoadAd = @"loadAd";
 static const NSString *kRewardAdIsReady = @"isReady";
 static const NSString *kRewardAdShow = @"show";
 
+static const NSString *kInterPluginChannelName = @"/interstitial";
+static const NSString *kInterLoadAd = @"loadAd";
+static const NSString *kInterAdIsReady = @"isReady";
+static const NSString *kInterAdShow = @"show";
+
+
 #endif /* ZytPluginConst_h */

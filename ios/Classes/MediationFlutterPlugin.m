@@ -1,5 +1,6 @@
 #import "MediationFlutterPlugin.h"
 #import <ZYTSDK/ZYTSDK.h>
+#import "zyt_mediation.h"
 @interface MediationFlutterPlugin()
 
 @property (nonatomic, strong) FlutterMethodChannel *channel;
@@ -15,8 +16,13 @@
     MediationFlutterPlugin* instance = [[MediationFlutterPlugin alloc] init];
     instance.channel = channel;
     [registrar addMethodCallDelegate:instance channel:channel];
-
     
+    [self registerAdPlugins:registrar];
+}
+
++ (void)registerAdPlugins:(NSObject<FlutterPluginRegistrar>*)registrar
+{
+    [RewardPlugin registerWithRegistrar:registrar];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {

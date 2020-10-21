@@ -39,6 +39,10 @@
 {
     if ([kRewardLoadAd isEqual:call.method]) {
         [self loadRewardAd:call];
+    } else if ([kRewardAdIsReady isEqual:call.method]) {
+        [self isAdReady:call result:result];
+    } else if ([kRewardAdShow isEqual:call.method]) {
+        [self showRewardAd:call result:result];
     }
 }
 
@@ -46,7 +50,6 @@
 {
     NSString *adUnitId = call.arguments[@"adUnitId"];
     NSString *channelId = call.arguments[@"channelId"];
-    
     if (adUnitId.length == 0) {
         return;
     }
@@ -54,13 +57,11 @@
     ZYTRewardedVideoAd *videoAd = self.rewardAdDic[adUnitId];
     
     // 如果缓存中已经存在广告
-    if (videoAd && [videoAd.channelId isEqualToString:channelId]) {
-        
+    if (videoAd) {
         // 广告处于加载状态，不再次加载
         if (videoAd.isAdLoading) {
             return;
         }
-        
         // 广告已经加载过，新建对象加载
         videoAd = [[ZYTRewardedVideoAd alloc] initWithAdSlotKey:adUnitId];
     } else {
@@ -70,32 +71,63 @@
     
     videoAd.delegate = self;
     videoAd.channelId = channelId;
+    [self.rewardAdDic setValue:videoAd
+                        forKey:adUnitId];
+    
     [videoAd loadAd];
+}
+
+- (void)isAdReady:(FlutterMethodCall *)call result:(FlutterResult)result
+{
+    NSString *adUnitId = call.arguments[@"adUnitId"];
+    ZYTRewardedVideoAd *videoAd = self.rewardAdDic[adUnitId];
+    result(@(videoAd.isAdReady));
+}
+
+- (void)showRewardAd:(FlutterMethodCall *)call result:(FlutterResult)result
+{
+    NSString *adUnitId = call.arguments[@"adUnitId"];
+    NSString *channelId = call.arguments[@"channelId"];
+    ZYTRewardedVideoAd *videoAd = self.rewardAdDic[adUnitId];
+    if (!videoAd.isAdReady) {
+        return;
+    }
+    videoAd.channelId = channelId;
+    [videoAd showAdFromRootViewController:[UIApplication sharedApplication].delegate.window.rootViewController];
+}
+
+#pragma mark - getter
+-(NSMutableDictionary *)rewardAdDic
+{
+    if (!_rewardAdDic) {
+        _rewardAdDic = [NSMutableDictionary dictionary];
+    }
+    return _rewardAdDic;
 }
 
 #pragma mark - ZYTRewardedVideoAdDelegate
 -(void)rewardedVideoAdDidLoad:(ZYTRewardedVideoAd *)rewardedVideoAd
 {
-    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[kRewardPluginChannelName stringByAppendingString:rewardedVideoAd.channelId]
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kRewardPluginChannelName,rewardedVideoAd.channelId]
                                                                 binaryMessenger:[self.registrar messenger]];
-    
+
     [channel invokeMethod:@"onLoaded"
                 arguments:@{@"adUnitId":rewardedVideoAd.adUnitId}];
 }
 
 -(void)rewardedVideoAd:(ZYTRewardedVideoAd *)rewardedVideoAd failToLoadWithError:(NSError *)error
 {
-    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[kRewardPluginChannelName stringByAppendingString:rewardedVideoAd.channelId]
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kRewardPluginChannelName,rewardedVideoAd.channelId]
                                                                 binaryMessenger:[self.registrar messenger]];
     
-    [channel invokeMethod:@"onLoaded"
+    [channel invokeMethod:@"onError"
                 arguments:@{@"adUnitId":rewardedVideoAd.adUnitId,
                             @"errMsg":error.description}];
 }
 
 - (void)rewardedVideoAdDidClick:(ZYTRewardedVideoAd *)rewardedVideoAd
 {
-    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[kRewardPluginChannelName stringByAppendingString:rewardedVideoAd.channelId]
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kRewardPluginChannelName,rewardedVideoAd.channelId]
                                                                 binaryMessenger:[self.registrar messenger]];
     
     [channel invokeMethod:@"onAdClick"
@@ -104,7 +136,7 @@
 
 -(void)rewardedVideoAdDidShow:(ZYTRewardedVideoAd *)rewardedVideoAd
 {
-    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[kRewardPluginChannelName stringByAppendingString:rewardedVideoAd.channelId]
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kRewardPluginChannelName,rewardedVideoAd.channelId]
                                                                 binaryMessenger:[self.registrar messenger]];
     
     [channel invokeMethod:@"onAdShow"
@@ -112,11 +144,13 @@
 }
 -(void)rewardedVideoAdDidClose:(ZYTRewardedVideoAd *)rewardedVideoAd withReward:(BOOL)shouldReward
 {
-    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[kRewardPluginChannelName stringByAppendingString:rewardedVideoAd.channelId]
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kRewardPluginChannelName,rewardedVideoAd.channelId]
                                                                 binaryMessenger:[self.registrar messenger]];
     
-    [channel invokeMethod:@"onAdShow"
-                arguments:@{@"adUnitId":rewardedVideoAd.adUnitId}];
+    [channel invokeMethod:@"onAdClose"
+                arguments:@{@"adUnitId":rewardedVideoAd.adUnitId,
+                            @"reward":@(shouldReward),
+                }];
 }
 
 @end

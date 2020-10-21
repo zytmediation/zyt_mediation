@@ -8,6 +8,7 @@ import 'package:zyt_mediation/call_back.dart';
 import 'package:zyt_mediation/interstitial.dart';
 import 'package:zyt_mediation/reward.dart';
 import 'package:zyt_mediation/zyt_mediation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -173,10 +174,49 @@ class HomePageState extends State<HomePage> {
       decoration:
           InputDecoration(
               contentPadding: EdgeInsets.all(0),
-              counterText: '',
               hintText: hintText
           ),
+      onSubmitted: (value){
+        print("文本提交 ：$value");
+        setPreference(hintText, value);
+      },
     );
+  }
+
+  @override
+  void initState()
+  {
+    super.initState();
+
+    setupCacheData();
+  }
+
+  setPreference(String pKey,String pValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(pKey, pValue);
+  }
+
+  Future<String> getPreference(String pKey,String pValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(pKey);
+  }
+
+  setupCacheData(){
+    Future<String> appid = getPreference("appid", "");
+    appid.then((String value){
+      setState(() {
+        initAppIdController.text = value;
+      });
+    });
+
+    Future<String> appkey = getPreference("appkey", "");
+    appkey.then((String value){
+      setState(() {
+        initAppKeyController.text = value;
+      });
+    });
+
+
   }
 
   initSdk() {
@@ -190,7 +230,7 @@ class HomePageState extends State<HomePage> {
   loadReward() {
     addLog("load reward ${rewardEditController.text}");
     Reward.load(
-        rewardEditController.text,
+        rewardEditController.text.toString(),
         RewardLoadCallBack(onLoaded: (adUnitId) {
           addLog("load reward success $adUnitId");
         }, onError: (adUnitId, errMsg) {

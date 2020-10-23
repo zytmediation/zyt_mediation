@@ -11,6 +11,8 @@
 #import "MediationFlutterPlugin.h"
 #import "RewardPlugin.h"
 #import "InterstitialPlugin.h"
+#import "BannerPlugin.h"
+#import "NativePlugin.h"
 
 #import "ZytPluginConst.h"
 

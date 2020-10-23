@@ -14,6 +14,11 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		CE754F7925416CF1001C3772 /* AppLovinSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE754F7025416C8F001C3772 /* AppLovinSDKResources.bundle */; };
+		CE754F7B25416CF3001C3772 /* baidumobadsdk.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE754F7125416C8F001C3772 /* baidumobadsdk.bundle */; };
+		CE754F7D25416CF6001C3772 /* BUAdSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE754F6E25416C8E001C3772 /* BUAdSDK.bundle */; };
+		CE754F7F25416CF8001C3772 /* VideoXResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE754F7225416C8F001C3772 /* VideoXResource.bundle */; };
+		CE754F8125416CFA001C3772 /* TATMediaSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE754F6F25416C8E001C3772 /* TATMediaSDK.bundle */; };
 		CEB63D7D25397EFA00C27841 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3BCCC2450A256B0B4EA5C3B /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +39,11 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE754F6E25416C8E001C3772 /* BUAdSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BUAdSDK.bundle; sourceTree = "<group>"; };
+		CE754F6F25416C8E001C3772 /* TATMediaSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TATMediaSDK.bundle; sourceTree = "<group>"; };
+		CE754F7025416C8F001C3772 /* AppLovinSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AppLovinSDKResources.bundle; sourceTree = "<group>"; };
+		CE754F7125416C8F001C3772 /* baidumobadsdk.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = baidumobadsdk.bundle; sourceTree = "<group>"; };
+		CE754F7225416C8F001C3772 /* VideoXResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = VideoXResource.bundle; sourceTree = "<group>"; };
 		E3BCCC2450A256B0B4EA5C3B /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8F3475C2C9B2E0F2A000385 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +127,11 @@
 		97C146F11CF9000F007C117D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CE754F7025416C8F001C3772 /* AppLovinSDKResources.bundle */,
+				CE754F7125416C8F001C3772 /* baidumobadsdk.bundle */,
+				CE754F6E25416C8E001C3772 /* BUAdSDK.bundle */,
+				CE754F6F25416C8E001C3772 /* TATMediaSDK.bundle */,
+				CE754F7225416C8F001C3772 /* VideoXResource.bundle */,
 				97C146F21CF9000F007C117D /* main.m */,
 			);
 			name = "Supporting Files";
@@ -183,8 +198,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE754F8125416CFA001C3772 /* TATMediaSDK.bundle in Resources */,
+				CE754F7B25416CF3001C3772 /* baidumobadsdk.bundle in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				CE754F7925416CF1001C3772 /* AppLovinSDKResources.bundle in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				CE754F7F25416CF8001C3772 /* VideoXResource.bundle in Resources */,
+				CE754F7D25416CF6001C3772 /* BUAdSDK.bundle in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
@@ -241,7 +261,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		F932BDA427566AC31649D5FD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

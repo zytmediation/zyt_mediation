@@ -62,7 +62,7 @@ class HomePageState extends State<HomePage> {
   Widget buildRewardWidget() {
     return Column(
       children: [
-        buildTextField(rewardEditController),
+        buildTextField(rewardEditController,"reward"),
         Row(
           children: [
             RaisedButton(
@@ -86,7 +86,7 @@ class HomePageState extends State<HomePage> {
   Widget buildInterstitialWidget() {
     return Column(
       children: [
-        buildTextField(interstitialEditController),
+        buildTextField(interstitialEditController,"interstitial"),
         Row(
           children: [
             RaisedButton(
@@ -119,7 +119,7 @@ class HomePageState extends State<HomePage> {
       children: [
         Expanded(
           flex: 1,
-          child: buildTextField(bannerEditController),
+          child: buildTextField(bannerEditController,"banner"),
         ),
         RaisedButton(
             child: Text("clear banner"), onPressed: () => clearBanner()),
@@ -216,7 +216,26 @@ class HomePageState extends State<HomePage> {
       });
     });
 
+    Future<String> reward = getPreference("reward", "");
+    reward.then((String value){
+      setState(() {
+        rewardEditController.text = value;
+      });
+    });
 
+    Future<String> interad = getPreference("interstitial", "");
+    interad.then((String value){
+      setState(() {
+        interstitialEditController.text = value;
+      });
+    });
+
+    Future<String> banner = getPreference("banner", "");
+    banner.then((String value){
+      setState(() {
+        bannerEditController.text = value;
+      });
+    });
   }
 
   initSdk() {

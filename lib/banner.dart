@@ -54,7 +54,14 @@ class _BannerAdState extends State<BannerAd> {
   }
 
   buildUIKitView(_adUnitId) {
-    return UiKitView();
+    return UiKitView(
+      viewType: Constants.V_BANNER,
+      creationParams: {
+        Constants.A_AD_UNIT_ID:_adUnitId,
+      },
+      onPlatformViewCreated: _onPlatformViewCreated,
+      creationParamsCodec: const StandardMessageCodec(),
+    );
   }
 
   _onPlatformViewCreated(int id) {

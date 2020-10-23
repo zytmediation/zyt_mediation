@@ -38,7 +38,7 @@
     } else if ([kRewardAdIsReady isEqual:call.method]) {
         [self isAdReady:call result:result];
     } else if ([kRewardAdShow isEqual:call.method]) {
-        [self showRewardAd:call result:result];
+        [self showInterstitialAd:call result:result];
     }
 }
 
@@ -80,7 +80,7 @@
     result(@(videoAd.adReady));
 }
 
-- (void)showRewardAd:(FlutterMethodCall *)call result:(FlutterResult)result
+- (void)showInterstitialAd:(FlutterMethodCall *)call result:(FlutterResult)result
 {
     NSString *adUnitId = call.arguments[@"adUnitId"];
     NSString *channelId = call.arguments[@"channelId"];
@@ -88,7 +88,7 @@
     if (!interAd.adReady) {
         return;
     }
-    interAd.channelId = channelId;
+//    interAd.channelId = channelId;
     [interAd showAdFromRootViewController:[UIApplication sharedApplication].delegate.window.rootViewController];
 }
 
@@ -100,5 +100,48 @@
     }
     return _interAdDic;
 }
+
+#pragma mark - ZYTInterstitialAdDelegate
+-(void)interstitialAdDidLoad:(ZYTInterstitialAd *)interstitialAd
+{
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kInterPluginChannelName,interstitialAd.channelId]
+                                                                binaryMessenger:[self.registrar messenger]];
+
+    [channel invokeMethod:@"onAdLoaded"
+                arguments:@{@"adUnitId":interstitialAd.adUnitId}];
+}
+
+-(void)interstitialAd:(ZYTInterstitialAd *)interstitialAd failedToLoadWithError:(NSError *)error
+{
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kInterPluginChannelName,interstitialAd.channelId]
+                                                                binaryMessenger:[self.registrar messenger]];
+
+    [channel invokeMethod:@"onError"
+                arguments:@{@"adUnitId":interstitialAd.adUnitId,
+                            @"errMsg":error.description
+                }];
+}
+
+-(void)interstitialAdDidOpen:(ZYTInterstitialAd *)interstitialAd{}
+
+-(void)interstitialAdDidClickAd:(ZYTInterstitialAd *)interstitialAd
+{
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kInterPluginChannelName,interstitialAd.channelId]
+                                                                binaryMessenger:[self.registrar messenger]];
+
+    [channel invokeMethod:@"onAdClick"
+                arguments:@{@"adUnitId":interstitialAd.adUnitId}];
+}
+
+-(void)interstitialAdDidClose:(ZYTInterstitialAd *)interstitialAd
+{
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kInterPluginChannelName,interstitialAd.channelId]
+                                                                binaryMessenger:[self.registrar messenger]];
+
+    [channel invokeMethod:@"onAdClose"
+                arguments:@{@"adUnitId":interstitialAd.adUnitId}];
+}
+
+
 
 @end

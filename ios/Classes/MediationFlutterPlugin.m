@@ -23,6 +23,9 @@
 + (void)registerAdPlugins:(NSObject<FlutterPluginRegistrar>*)registrar
 {
     [RewardPlugin registerWithRegistrar:registrar];
+    [InterstitialPlugin registerWithRegistrar:registrar];
+    [BannerPlugin registerWithRegistrar:registrar];
+    [NativePlugin registerWithRegistrar:registrar];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {

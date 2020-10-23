@@ -23,5 +23,13 @@ static const NSString *kInterLoadAd = @"loadAd";
 static const NSString *kInterAdIsReady = @"isReady";
 static const NSString *kInterAdShow = @"show";
 
+static const NSString *kBannerViewName = @"bannerView";
+static const NSString *kBannerPluginChannelName = @"/banner";
+static const NSString *kBannerLoadAd = @"loadAd";
+
+static const NSString *kNativeViewName = @"nativeView";
+
+static const NSString *kAdUnitId = @"adUnitId";
+
 
 #endif /* ZytPluginConst_h */

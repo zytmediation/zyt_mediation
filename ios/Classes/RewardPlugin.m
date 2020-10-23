@@ -151,6 +151,8 @@
                 arguments:@{@"adUnitId":rewardedVideoAd.adUnitId,
                             @"reward":@(shouldReward),
                 }];
+    
+    [self.rewardAdDic removeObjectForKey:rewardedVideoAd.adUnitId];
 }
 
 @end

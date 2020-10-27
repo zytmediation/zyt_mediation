@@ -54,6 +54,16 @@ class NativeCallBack {
   NativeCallBack({this.onLoaded, this.onError, this.onClose, this.onAdClick});
 }
 
+/// 开屏回调
+class SplashCallBack {
+  OnAdShow onAdShow;
+  OnError onError;
+  OnClose onClose;
+  OnAdClick onAdClick;
+
+  SplashCallBack({this.onAdShow, this.onError, this.onClose, this.onAdClick});
+}
+
 typedef OnLoaded = void Function(String adUnitId);
 typedef OnError = void Function(String adUnitId, String errMsg);
 

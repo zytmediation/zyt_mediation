@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:zyt_mediation/call_back.dart';
-import 'package:zyt_mediation/screen_util.dart';
 
 import 'constants.dart';
 
@@ -53,8 +52,6 @@ class NativeAdState extends State<NativeAd> {
       viewType: Constants.V_NATIVE,
       creationParams: {
         Constants.A_AD_UNIT_ID: _adUnitId,
-        Constants.WIDTH : width,
-        Constants.HEIGHT : height,
       },
       onPlatformViewCreated: _onPlatformViewCreated,
       creationParamsCodec: const StandardMessageCodec(),
@@ -82,6 +79,10 @@ class NativeAdState extends State<NativeAd> {
           var width = call.arguments[Constants.WIDTH];
           var height = call.arguments[Constants.HEIGHT];
           if (width > 0 && height > 0) {
+          // _width = ScreenUtil.px2dp(width);
+          // _height = ScreenUtil.px2dp(height);
+          // _show = true;
+            // setState(() {});
 
           }
           break;

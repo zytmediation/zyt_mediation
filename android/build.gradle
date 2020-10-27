@@ -45,8 +45,8 @@ android {
 
 }
 dependencies {
-    implementation 'com.zyt:mediation-base:1.7.3'
-    implementation 'com.zyt:mediation-tt:3.0.0.4.2'
+    implementation 'com.zyt:mediation-base:1.8.0'
+    implementation 'com.zyt:mediation-tt:3.2.5.1.1'
     implementation 'com.zyt:mediation-gdt:4.191.1061.2'
     implementation 'com.zyt:mediation-ks:3.3.3.1'
     implementation 'com.zyt:mediation-baidu:5.88.1'

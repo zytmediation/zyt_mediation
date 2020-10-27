@@ -7,6 +7,7 @@ import 'package:zyt_mediation/banner.dart';
 import 'package:zyt_mediation/call_back.dart';
 import 'package:zyt_mediation/interstitial.dart';
 import 'package:zyt_mediation/reward.dart';
+import 'package:zyt_mediation/splash.dart';
 import 'package:zyt_mediation/zyt_mediation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -136,7 +137,7 @@ class HomePageState extends State<HomePage> {
           child: buildTextField(splashEditController),
         ),
         RaisedButton(
-          onPressed: () => loadInterstitial(),
+          onPressed: () => loadSplash(),
           child: Text("load splash"),
         ),
         RaisedButton(
@@ -308,6 +309,21 @@ class HomePageState extends State<HomePage> {
         interstitialEditController.text,
         InterstitialLoadCallBack(onLoaded: (adUnitId) {
           addLog("interstitial load success $adUnitId");
+        }, onError: (adUnitId, errMsg) {
+          addLog("interstitial error $adUnitId,$errMsg");
+        }, onAdClick: (adUnitId) {
+          addLog("interstitial click $adUnitId");
+        }, onClose: (adUnitId) {
+          addLog("interstitial close $adUnitId");
+        }));
+  }
+
+  loadSplash() {
+    addLog("load splash ${splashEditController.text}");
+    Splash.load(
+        splashEditController.text,
+        SplashCallBack(onAdShow: (adUnitId) {
+          addLog("interstitial show success $adUnitId");
         }, onError: (adUnitId, errMsg) {
           addLog("interstitial error $adUnitId,$errMsg");
         }, onAdClick: (adUnitId) {

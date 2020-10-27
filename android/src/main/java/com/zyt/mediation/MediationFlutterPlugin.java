@@ -56,6 +56,7 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         this.channel = channel;
         this.mContext = mContext;
         this.mActivity = mActivity;
+        ComponenttHodler.setActivity(mActivity);
     }
 
     @Override
@@ -74,9 +75,14 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         final MethodChannel interstitialChannel = new MethodChannel(dartExecutor, P_INTERSTITIAL);
         interstitialChannel.setMethodCallHandler(new InterstitialPlugin(dartExecutor));
 
-        // banner channel
-        final MethodChannel bannerChannel = new MethodChannel(dartExecutor, P_BANNER);
-        bannerChannel.setMethodCallHandler(new BannerPlugin(dartExecutor));
+//        // banner channel
+//        final MethodChannel bannerChannel = new MethodChannel(dartExecutor, P_BANNER);
+//        bannerChannel.setMethodCallHandler(new BannerPlugin(dartExecutor));
+
+
+        // splash channel
+        final MethodChannel splashChannel = new MethodChannel(dartExecutor, P_SPLASH);
+        splashChannel.setMethodCallHandler(new SplashPlugin(dartExecutor));
 
         flutterPluginBinding
                 .getPlatformViewRegistry().
@@ -169,6 +175,7 @@ public class MediationFlutterPlugin extends BasePlugin implements FlutterPlugin,
         ComponentHolder.setUnityActivity(binding.getActivity());
 
         mActivity = binding.getActivity();
+        ComponenttHodler.setActivity(mActivity);
     }
 
     @Override

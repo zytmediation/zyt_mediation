@@ -26,6 +26,7 @@
     [InterstitialPlugin registerWithRegistrar:registrar];
     [BannerPlugin registerWithRegistrar:registrar];
     [NativePlugin registerWithRegistrar:registrar];
+    [SplashPlugin registerWithRegistrar:registrar];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {

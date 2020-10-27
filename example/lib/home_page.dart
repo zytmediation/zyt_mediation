@@ -134,7 +134,7 @@ class HomePageState extends State<HomePage> {
       children: [
         Expanded(
           flex: 1,
-          child: buildTextField(splashEditController),
+          child: buildTextField(splashEditController,"splash"),
         ),
         RaisedButton(
           onPressed: () => loadSplash(),
@@ -235,6 +235,13 @@ class HomePageState extends State<HomePage> {
     banner.then((String value){
       setState(() {
         bannerEditController.text = value;
+      });
+    });
+
+    Future<String> splash = getPreference("splash", "");
+    splash.then((String value){
+      setState(() {
+        splashEditController.text = value;
       });
     });
   }

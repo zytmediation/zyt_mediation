@@ -13,6 +13,7 @@
 #import "InterstitialPlugin.h"
 #import "BannerPlugin.h"
 #import "NativePlugin.h"
+#import "SplashPlugin.h"
 
 #import "ZytPluginConst.h"
 

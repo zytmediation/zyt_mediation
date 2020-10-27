@@ -28,8 +28,10 @@ static const NSString *kBannerPluginChannelName = @"/banner";
 static const NSString *kBannerLoadAd = @"loadAd";
 
 static const NSString *kNativeViewName = @"nativeView";
+static const NSString *kNativePluginChannelName = @"/native";
 
 static const NSString *kAdUnitId = @"adUnitId";
-
+static const NSString *kAdWidth = @"width";
+static const NSString *kAdHeight = @"height";
 
 #endif /* ZytPluginConst_h */

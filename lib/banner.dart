@@ -94,12 +94,12 @@ class _BannerAdState extends State<BannerAd> {
     });
   }
 
-  @override
-  void dispose() {
-    if (_adChannel != null) {
-      _adChannel.setMethodCallHandler(null);
-      _adChannel = null;
-    }
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   if (_adChannel != null) {
+  //     _adChannel.setMethodCallHandler(null);
+  //     _adChannel = null;
+  //   }
+  //   super.dispose();
+  // }
 }

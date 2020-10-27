@@ -9,24 +9,26 @@ import 'constants.dart';
 class NativeAd extends StatefulWidget {
   final String _adUnitId;
   NativeCallBack nativeCallBack;
+  double height;
+  double width;
 
-  NativeAd(this._adUnitId, {this.nativeCallBack});
+  NativeAd(this._adUnitId, {this.nativeCallBack,this.width,this.height});
 
   @override
   State<StatefulWidget> createState() {
-    return NativeAdState(_adUnitId, nativeCallBack: nativeCallBack);
+    return NativeAdState(_adUnitId, nativeCallBack: nativeCallBack,width: width,height: height);
   }
 }
 
 class NativeAdState extends State<NativeAd> {
   MethodChannel _adChannel;
   String _adUnitId;
-  double _width = ScreenUtil.SCREEN_WIDTH;
-  double _height = ScreenUtil.SCREEN_HEIGHT;
+  double height;
+  double width;
   bool _show = false;
   NativeCallBack nativeCallBack;
 
-  NativeAdState(this._adUnitId, {this.nativeCallBack});
+  NativeAdState(this._adUnitId, {this.nativeCallBack,this.width,this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +40,8 @@ class NativeAdState extends State<NativeAd> {
         offstage: !_show,
         child: Container(
             alignment: Alignment.center,
-            width: _width,
-            height: _height,
+            width: width,
+            height: height,
             child: Center(
                 child: defaultTargetPlatform == TargetPlatform.android
                     ? buildAndroidView(_adUnitId)
@@ -51,6 +53,8 @@ class NativeAdState extends State<NativeAd> {
       viewType: Constants.V_NATIVE,
       creationParams: {
         Constants.A_AD_UNIT_ID: _adUnitId,
+        Constants.WIDTH : width,
+        Constants.HEIGHT : height,
       },
       onPlatformViewCreated: _onPlatformViewCreated,
       creationParamsCodec: const StandardMessageCodec(),
@@ -62,6 +66,8 @@ class NativeAdState extends State<NativeAd> {
       viewType: Constants.V_NATIVE,
       creationParams: {
         Constants.A_AD_UNIT_ID:_adUnitId,
+        Constants.WIDTH : width,
+        Constants.HEIGHT : height,
       },
       onPlatformViewCreated: _onPlatformViewCreated,
       creationParamsCodec: const StandardMessageCodec(),
@@ -76,13 +82,12 @@ class NativeAdState extends State<NativeAd> {
           var width = call.arguments[Constants.WIDTH];
           var height = call.arguments[Constants.HEIGHT];
           if (width > 0 && height > 0) {
-            _width = ScreenUtil.px2dp(width);
-            _height = ScreenUtil.px2dp(height);
-            _show = true;
-            setState(() {});
+
           }
           break;
         case Constants.C_NATIVE_ON_AD_LOADED:
+          _show = true;
+          setState(() {});
           if (nativeCallBack != null && nativeCallBack.onLoaded != null) {
             nativeCallBack.onLoaded(call.arguments[Constants.A_AD_UNIT_ID]);
           }
@@ -108,12 +113,12 @@ class NativeAdState extends State<NativeAd> {
     });
   }
 
-  @override
-  void dispose() {
-    if (_adChannel != null) {
-      _adChannel.setMethodCallHandler(null);
-      _adChannel = null;
-    }
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   if (_adChannel != null) {
+  //     _adChannel.setMethodCallHandler(null);
+  //     _adChannel = null;
+  //   }
+  //   super.dispose();
+  // }
 }

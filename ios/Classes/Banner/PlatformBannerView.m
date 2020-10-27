@@ -22,6 +22,11 @@
 
 @implementation PlatformBannerView
 
+-(void)dealloc
+{
+    NSLog(@"PlatformView Dealloc");
+}
+
 -(instancetype)initWithWithFrame:(CGRect)frame
                   viewIdentifier:(int64_t)viewId
                        arguments:(id)args
@@ -34,16 +39,11 @@
         self.args = (NSDictionary *)args;
         self.messenger = messenger;
         
-        FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[kMediationChannelName stringByAppendingFormat:@"%@%d",kRewardPluginChannelName,viewId]
-                                                                    binaryMessenger:messenger];
-        
         NSString *adUnitId = self.args[kAdUnitId];
         self.bannerAd = [[ZYTBannerAd alloc] initWithSlotKey:adUnitId
                                           rootViewController:[UIApplication sharedApplication].delegate.window.rootViewController
                                                     delegate:self];
         [self.bannerAd showBanner];
-        
-        self.channel = channel;
     }
     return self;
 }

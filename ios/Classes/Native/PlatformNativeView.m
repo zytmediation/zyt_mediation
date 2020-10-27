@@ -30,27 +30,23 @@
 {
     self = [super init];
     if (self) {
-        self.frame = frame;
+
         self.viewId = @(viewId).stringValue;
         self.args = (NSDictionary *)args;
         self.messenger = messenger;
         
-        FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:
-                                         [kMediationChannelName stringByAppendingFormat:@"%@%d",kNativeViewName,viewId]
-                                                                    binaryMessenger:messenger];
-        
         NSString *adUnitId = self.args[kAdUnitId];
+        NSNumber *height = self.args[kAdHeight];
+        NSNumber *width = self.args[kAdWidth];
         
-        self.nativeAd = [[ZYTNativeAd alloc] initWithSlotKey:adUnitId size:CGSizeZero];
+        self.nativeAd = [[ZYTNativeAd alloc] initWithSlotKey:adUnitId size:CGSizeMake(height.doubleValue,width.doubleValue)];
         self.nativeAd.delegate = self;
         [self.nativeAd loadNativeAd:1];
-        
-        self.channel = channel;
     }
     return self;
 }
 
-- (UIView*)view
+- (UIView *)view
 {
     return self.containerView;
 }
@@ -70,15 +66,49 @@
 -(void)nativeExpressAdSuccessToLoad:(ZYTNativeAd *)nativeExpressAd
                               views:(NSArray<__kindof ZYTNativeAdView *> *)views
 {
+    UIViewController *rootVC = [UIApplication sharedApplication].delegate.window.rootViewController;
     ZYTNativeAdView *adView = views[0];
-    adView.controller = [UIApplication sharedApplication].delegate.window.rootViewController;
+    
+    NSNumber *height = self.args[kAdHeight];
+    NSNumber *width = self.args[kAdWidth];
+    
+    adView.frame = CGRectMake(0, 0, width.doubleValue, height.doubleValue);
+    adView.controller = rootVC;
     [self.containerView addSubview:adView];
+    
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@/%@",kMediationChannelName,kNativePluginChannelName,self.viewId]
+                                                                binaryMessenger:self.messenger];
+    
+    [channel invokeMethod:@"onAdLoaded"
+                arguments:@{@"adUnitId":nativeExpressAd.adUnitId,}
+     ];
+    
+    [adView registerViewForNativeAd:nativeExpressAd
+                           nativeMaterial:nil
+                           viewController:rootVC
+                           clickableViews:nil];
 }
 
 -(void)nativeExpressAdFailToLoad:(ZYTNativeAd *)nativeExpressAd
                            error:(NSError *)error
 {
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@/%@",kMediationChannelName,kNativePluginChannelName,self.viewId]
+                                                                binaryMessenger:self.messenger];
     
+    [channel invokeMethod:@"onError"
+                arguments:@{@"adUnitId":nativeExpressAd.adUnitId,
+                            @"errMsg":error.description}
+     ];
+}
+
+-(void)nativeExpressAdViewClicked:(ZYTNativeAd *)nativeExpressAdView
+{
+    FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@/%@",kMediationChannelName,kNativePluginChannelName,self.viewId]
+                                                                binaryMessenger:self.messenger];
+    
+    [channel invokeMethod:@"onAdClick"
+                arguments:@{@"adUnitId":nativeExpressAdView.adUnitId}
+     ];
 }
 
 @end

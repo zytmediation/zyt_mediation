@@ -16,7 +16,7 @@ class BannerAd extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _BannerAdState(_adUnitId);
+    return _BannerAdState(_adUnitId, bannerCallBack: bannerCallBack);
   }
 }
 
@@ -57,7 +57,7 @@ class _BannerAdState extends State<BannerAd> {
     return UiKitView(
       viewType: Constants.V_BANNER,
       creationParams: {
-        Constants.A_AD_UNIT_ID:_adUnitId,
+        Constants.A_AD_UNIT_ID: _adUnitId,
       },
       onPlatformViewCreated: _onPlatformViewCreated,
       creationParamsCodec: const StandardMessageCodec(),
@@ -94,12 +94,12 @@ class _BannerAdState extends State<BannerAd> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   if (_adChannel != null) {
-  //     _adChannel.setMethodCallHandler(null);
-  //     _adChannel = null;
-  //   }
-  //   super.dispose();
-  // }
+// @override
+// void dispose() {
+//   if (_adChannel != null) {
+//     _adChannel.setMethodCallHandler(null);
+//     _adChannel = null;
+//   }
+//   super.dispose();
+// }
 }

@@ -119,7 +119,7 @@
 7. 开屏广告
 
    ```dart
-  Splash.load(
+    Splash.load(
        "此处填写您的adUnitId",
        SplashCallBack(onAdShow: (adUnitId) {
          addLog("splash show success $adUnitId");

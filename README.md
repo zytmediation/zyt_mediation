@@ -1,4 +1,4 @@
-# zyt_mediatyion flutter 插件
+# zyt_mediation flutter 插件
 
 ## 接入指南
 
@@ -119,17 +119,25 @@
 7. 开屏广告
 
    ```dart
-    Splash.load(
-       "此处填写您的adUnitId",
-       SplashCallBack(onAdShow: (adUnitId) {
-         addLog("splash show success $adUnitId");
-       }, onError: (adUnitId, errMsg) {
-         addLog("splash error $adUnitId,$errMsg");
-       }, onAdClick: (adUnitId) {
-         addLog("splash click $adUnitId");
-       }, onClose: (adUnitId) {
-         addLog("splash close $adUnitId");
-       }));
+    splashAd = SplashAd.newInstance("此处填写您的adUnitId");
+    splashAd.splashCallBack =
+        SplashCallBack(onSplashLoaded: (String adUnitId, SplashAd splash) {
+      addLog("splash loaded $adUnitId");
+      /// 此处收到回调后必须直接调用展示方法。如果没有立即展示，执行其他代码后再展示可能造成无法展示的现象。
+      /// 如果应用端已经跳转到首页（或其他页面）可以不调用展示方法。
+      /// 如果没有立即调用展示方法，本次开屏将失效，下次使用需再次穿件对象并加载。
+      splash.show();
+    }, onAdShow: (adUnitId) {
+      addLog("splash show $adUnitId");
+    }, onError: (adUnitId, errMsg) {
+      addLog("splash error $adUnitId,$errMsg");
+    }, onAdClick: (adUnitId) {
+      addLog("splash click $adUnitId");
+    }, onClose: (adUnitId) {
+      addLog("splash close $adUnitId");
+    });
+    splashAd.load();
+  }
    ```
 
 ## 测试 key（仅用于测试使用）

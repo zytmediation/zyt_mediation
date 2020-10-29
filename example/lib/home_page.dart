@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mediation_flutter_example/native_example_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zyt_mediation/banner.dart';
 import 'package:zyt_mediation/call_back.dart';
 import 'package:zyt_mediation/interstitial.dart';
 import 'package:zyt_mediation/reward.dart';
-import 'package:zyt_mediation/splash.dart';
 import 'package:zyt_mediation/splash_ad.dart';
 import 'package:zyt_mediation/zyt_mediation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'native_example_page.dart';
 
 class HomePage extends StatefulWidget {
   @override

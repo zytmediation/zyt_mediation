@@ -2,17 +2,21 @@ package com.zyt.mediation;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
-import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 
 import com.zyt.med.internal.splash.SplashAdListener;
+import com.zyt.mediation.gdt.GDTSplashAdAdapter;
 
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -28,6 +32,7 @@ public class SplashPlugin extends BasePlugin {
     private BinaryMessenger binaryMessenger;
     private SparseArray<SplashAdResponse> splashAdResponses = new SparseArray<>();
     private ViewGroup parentViewGroup;
+    private CountDownLatch countDownLatch;
 
     public SplashPlugin(BinaryMessenger binaryMessenger) {
         this.binaryMessenger = binaryMessenger;
@@ -64,8 +69,18 @@ public class SplashPlugin extends BasePlugin {
             @Override
             public void onAdLoaded(SplashAdResponse splashAdResponse) {
                 splashAdResponses.put(channelId, splashAdResponse);
+
                 if (finalAdChannel != null) {
                     finalAdChannel.invokeMethod(C_SPLASH_ON_AD_LOADED, MapBuilder.of(A_AD_UNIT_ID, adUnitId));
+                    if (splashAdResponse instanceof GDTSplashAdAdapter) {
+                        countDownLatch = new CountDownLatch(1);
+                        try {
+                            countDownLatch.await(1000, TimeUnit.MILLISECONDS);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("zyt-mediation", "广点通继续运行");
+                    }
                 }
             }
 
@@ -125,6 +140,9 @@ public class SplashPlugin extends BasePlugin {
                     splashAdResponse.show(parentViewGroup);
                 }
             }
+        }
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
         }
         result.success(null);
     }

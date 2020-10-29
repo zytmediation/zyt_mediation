@@ -6,16 +6,20 @@ import 'package:zyt_mediation/call_back.dart';
 import 'constants.dart';
 
 class NativeAd extends StatefulWidget {
-  final String _adUnitId;
+  String _adUnitId;
   NativeCallBack nativeCallBack;
   double height;
   double width;
 
-  NativeAd(this._adUnitId, {this.nativeCallBack,this.width,this.height});
+  NativeAd(this._adUnitId, {this.nativeCallBack, this.width, this.height}) {
+    var adUnitId = _adUnitId;
+    print("flutter_test:$_adUnitId");
+  }
 
   @override
   State<StatefulWidget> createState() {
-    return NativeAdState(_adUnitId, nativeCallBack: nativeCallBack,width: width,height: height);
+    return NativeAdState(_adUnitId,
+        nativeCallBack: nativeCallBack, width: width, height: height);
   }
 }
 
@@ -27,7 +31,7 @@ class NativeAdState extends State<NativeAd> {
   bool _show = false;
   NativeCallBack nativeCallBack;
 
-  NativeAdState(this._adUnitId, {this.nativeCallBack,this.width,this.height});
+  NativeAdState(this._adUnitId, {this.nativeCallBack, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +66,9 @@ class NativeAdState extends State<NativeAd> {
     return UiKitView(
       viewType: Constants.V_NATIVE,
       creationParams: {
-        Constants.A_AD_UNIT_ID:_adUnitId,
-        Constants.WIDTH : width,
-        Constants.HEIGHT : height,
+        Constants.A_AD_UNIT_ID: _adUnitId,
+        Constants.WIDTH: width,
+        Constants.HEIGHT: height,
       },
       onPlatformViewCreated: _onPlatformViewCreated,
       creationParamsCodec: const StandardMessageCodec(),
@@ -79,9 +83,9 @@ class NativeAdState extends State<NativeAd> {
           var width = call.arguments[Constants.WIDTH];
           var height = call.arguments[Constants.HEIGHT];
           if (width > 0 && height > 0) {
-          // _width = ScreenUtil.px2dp(width);
-          // _height = ScreenUtil.px2dp(height);
-          // _show = true;
+            // _width = ScreenUtil.px2dp(width);
+            // _height = ScreenUtil.px2dp(height);
+            // _show = true;
             // setState(() {});
 
           }
@@ -114,12 +118,12 @@ class NativeAdState extends State<NativeAd> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   if (_adChannel != null) {
-  //     _adChannel.setMethodCallHandler(null);
-  //     _adChannel = null;
-  //   }
-  //   super.dispose();
-  // }
+// @override
+// void dispose() {
+//   if (_adChannel != null) {
+//     _adChannel.setMethodCallHandler(null);
+//     _adChannel = null;
+//   }
+//   super.dispose();
+// }
 }

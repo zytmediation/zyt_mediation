@@ -1,3 +1,5 @@
+import 'splash_ad.dart';
+
 /// 初始化回调
 class InitCallBack {
   OnInitSuccess onInitSuccess;
@@ -56,14 +58,21 @@ class NativeCallBack {
 
 /// 开屏回调
 class SplashCallBack {
+  OnSplashLoaded onSplashLoaded;
   OnAdShow onAdShow;
   OnError onError;
   OnClose onClose;
   OnAdClick onAdClick;
 
-  SplashCallBack({this.onAdShow, this.onError, this.onClose, this.onAdClick});
+  SplashCallBack(
+      {this.onSplashLoaded,
+      this.onAdShow,
+      this.onError,
+      this.onClose,
+      this.onAdClick});
 }
 
+typedef OnSplashLoaded = void Function(String adUnitId, SplashAd splashAd);
 typedef OnLoaded = void Function(String adUnitId);
 typedef OnError = void Function(String adUnitId, String errMsg);
 

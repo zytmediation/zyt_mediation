@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
+import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 
@@ -25,6 +26,8 @@ import mobi.android.SplashAd;
  */
 public class SplashPlugin extends BasePlugin {
     private BinaryMessenger binaryMessenger;
+    private SparseArray<SplashAdResponse> splashAdResponses = new SparseArray<>();
+    private ViewGroup parentViewGroup;
 
     public SplashPlugin(BinaryMessenger binaryMessenger) {
         this.binaryMessenger = binaryMessenger;
@@ -35,6 +38,8 @@ public class SplashPlugin extends BasePlugin {
         switch (call.method) {
             case M_SPLASH_LOAD_AD:
                 loadAd(call, result);
+            case M_SPLASH_SHOW_AD:
+                showAd(call, result);
                 break;
             default:
                 result.notImplemented();
@@ -43,7 +48,7 @@ public class SplashPlugin extends BasePlugin {
 
     public void loadAd(MethodCall call, MethodChannel.Result result) {
         final String adUnitId = call.argument(A_AD_UNIT_ID);
-        Integer channelId = call.argument(A_CHANNEL_ID);
+        final Integer channelId = call.argument(A_CHANNEL_ID);
         if (TextUtils.isEmpty(adUnitId)) {
             result.error("error", "adUnitId is empty", null);
             return;
@@ -55,18 +60,12 @@ public class SplashPlugin extends BasePlugin {
         }
         final MethodChannel finalAdChannel = adChannel;
         SplashAd.loadAd(null, adUnitId, new SplashAdListener() {
-            private ViewGroup parentViewGroup;
 
             @Override
             public void onAdLoaded(SplashAdResponse splashAdResponse) {
-                Activity activity = ComponenttHodler.getActivity();
-                if (activity != null) {
-                    View contentView = activity.findViewById(android.R.id.content);
-                    if (contentView instanceof ViewGroup) {
-                        parentViewGroup = new FrameLayout(contentView.getContext());
-                        ((ViewGroup) contentView).addView(parentViewGroup);
-                        splashAdResponse.show(parentViewGroup);
-                    }
+                splashAdResponses.put(channelId, splashAdResponse);
+                if (finalAdChannel != null) {
+                    finalAdChannel.invokeMethod(C_SPLASH_ON_AD_LOADED, MapBuilder.of(A_AD_UNIT_ID, adUnitId));
                 }
             }
 
@@ -105,6 +104,25 @@ public class SplashPlugin extends BasePlugin {
                 }
             }
         });
+        result.success(null);
+    }
+
+    private void showAd(MethodCall call, MethodChannel.Result result) {
+        Integer channelId = call.argument(A_CHANNEL_ID);
+        SplashAdResponse splashAdResponse = splashAdResponses.get(channelId);
+        if (splashAdResponse != null) {
+            Activity activity = ComponenttHodler.getActivity();
+            if (activity != null) {
+                View contentView = activity.findViewById(android.R.id.content);
+                if (contentView instanceof ViewGroup) {
+                    removeView(parentViewGroup);
+                    parentViewGroup = new FrameLayout(contentView.getContext());
+                    ((ViewGroup) contentView).addView(parentViewGroup);
+                    splashAdResponses.remove(channelId);
+                    splashAdResponse.show(parentViewGroup);
+                }
+            }
+        }
         result.success(null);
     }
 

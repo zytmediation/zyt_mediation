@@ -63,12 +63,14 @@ class Constants {
 
   static const String P_SPLASH = P_MEDIATION_FLUTTER + "/splash";
   static const String M_SPLASH_LOAD_AD = "loadAd";
+  static const String M_SPLASH_SHOW_AD = "showAd";
 
   // 开屏回调
   static const String C_SPLASH_ON_ERROR = "onError";
   static const String C_SPLASH_ON_AD_SHOW = "onAdShow";
   static const String C_SPLASH_ON_AD_CLICK = "onAdClick";
   static const String C_SPLASH_ON_AD_CLOSE = "onAdClose";
+  static const String C_SPLASH_ON_AD_LOADED = "onSplashAdLoaded";
 
   // 共用
   static const String A_AD_UNIT_ID = "adUnitId";

@@ -68,12 +68,14 @@ public interface Constants {
 
     String P_SPLASH = P_MEDIATION_FLUTTER + "/splash";
     String M_SPLASH_LOAD_AD = "loadAd";
+    String M_SPLASH_SHOW_AD = "showAd";
 
     // 开屏回调
     String C_SPLASH_ON_ERROR = "onError";
     String C_SPLASH_ON_AD_SHOW = "onAdShow";
     String C_SPLASH_ON_AD_CLICK = "onAdClick";
     String C_SPLASH_ON_AD_CLOSE = "onAdClose";
+    String C_SPLASH_ON_AD_LOADED = "onSplashAdLoaded";
 
 
     String C_ON_LAYOUT_CHANGE = "onLayoutChange";

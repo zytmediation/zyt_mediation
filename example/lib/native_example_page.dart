@@ -122,10 +122,10 @@ class _NativeExampleState extends State<NativeExamplePage> {
       width: double.parse(_widthEditController.text),
       height: double.parse(_heightEditController.text),
       nativeCallBack: NativeCallBack(
-              onLoaded: (_) => addLog("load success"),
-              onAdClick: (_) => addLog("native click"),
-              onClose: (_) => addLog("native close"),
-              onError: (_, errMsg) => addLog("native error:$errMsg")),
+          onLoaded: (_) => addLog("load success"),
+          onAdClick: (_) => addLog("native click"),
+          onClose: (_) => addLog("native close"),
+          onError: (_, errMsg) => addLog("native error:$errMsg")),
     );
   }
 

@@ -8,6 +8,7 @@ import 'package:zyt_mediation/call_back.dart';
 import 'package:zyt_mediation/interstitial.dart';
 import 'package:zyt_mediation/reward.dart';
 import 'package:zyt_mediation/splash.dart';
+import 'package:zyt_mediation/splash_ad.dart';
 import 'package:zyt_mediation/zyt_mediation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,9 +48,8 @@ class HomePageState extends State<HomePage> {
 
   Widget buildInitWidget() {
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      
-      Expanded(flex: 1, child: buildTextField(initAppIdController,"appid")),
-      Expanded(flex: 1, child: buildTextField(initAppKeyController,"appkey")),
+      Expanded(flex: 1, child: buildTextField(initAppIdController, "appid")),
+      Expanded(flex: 1, child: buildTextField(initAppKeyController, "appkey")),
       Expanded(
         flex: 1,
         child: RaisedButton(
@@ -63,7 +63,7 @@ class HomePageState extends State<HomePage> {
   Widget buildRewardWidget() {
     return Column(
       children: [
-        buildTextField(rewardEditController,"reward"),
+        buildTextField(rewardEditController, "reward"),
         Row(
           children: [
             RaisedButton(
@@ -87,7 +87,7 @@ class HomePageState extends State<HomePage> {
   Widget buildInterstitialWidget() {
     return Column(
       children: [
-        buildTextField(interstitialEditController,"interstitial"),
+        buildTextField(interstitialEditController, "interstitial"),
         Row(
           children: [
             RaisedButton(
@@ -120,7 +120,7 @@ class HomePageState extends State<HomePage> {
       children: [
         Expanded(
           flex: 1,
-          child: buildTextField(bannerEditController,"banner"),
+          child: buildTextField(bannerEditController, "banner"),
         ),
         RaisedButton(
             child: Text("clear banner"), onPressed: () => clearBanner()),
@@ -134,11 +134,15 @@ class HomePageState extends State<HomePage> {
       children: [
         Expanded(
           flex: 1,
-          child: buildTextField(splashEditController,"splash"),
+          child: buildTextField(splashEditController, "splash"),
         ),
         RaisedButton(
           onPressed: () => loadSplash(),
           child: Text("load splash"),
+        ),
+        RaisedButton(
+          onPressed: () => showSplash(),
+          child: Text("show splash"),
         ),
         RaisedButton(
           child: Text("clear log"),
@@ -172,12 +176,9 @@ class HomePageState extends State<HomePage> {
       maxLines: 1,
       // inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
       keyboardType: TextInputType.text,
-      decoration:
-          InputDecoration(
-              contentPadding: EdgeInsets.all(0),
-              hintText: hintText
-          ),
-      onSubmitted: (value){
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(0), hintText: hintText),
+      onSubmitted: (value) {
         print("文本提交 ：$value");
         setPreference(hintText, value);
       },
@@ -185,61 +186,60 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
 
     setupCacheData();
   }
 
-  setPreference(String pKey,String pValue) async {
+  setPreference(String pKey, String pValue) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(pKey, pValue);
   }
 
-  Future<String> getPreference(String pKey,String pValue) async {
+  Future<String> getPreference(String pKey, String pValue) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(pKey);
   }
 
-  setupCacheData(){
+  setupCacheData() {
     Future<String> appid = getPreference("appid", "");
-    appid.then((String value){
+    appid.then((String value) {
       setState(() {
         initAppIdController.text = value;
       });
     });
 
     Future<String> appkey = getPreference("appkey", "");
-    appkey.then((String value){
+    appkey.then((String value) {
       setState(() {
         initAppKeyController.text = value;
       });
     });
 
     Future<String> reward = getPreference("reward", "");
-    reward.then((String value){
+    reward.then((String value) {
       setState(() {
         rewardEditController.text = value;
       });
     });
 
     Future<String> interad = getPreference("interstitial", "");
-    interad.then((String value){
+    interad.then((String value) {
       setState(() {
         interstitialEditController.text = value;
       });
     });
 
     Future<String> banner = getPreference("banner", "");
-    banner.then((String value){
+    banner.then((String value) {
       setState(() {
         bannerEditController.text = value;
       });
     });
 
     Future<String> splash = getPreference("splash", "");
-    splash.then((String value){
+    splash.then((String value) {
       setState(() {
         splashEditController.text = value;
       });
@@ -248,7 +248,8 @@ class HomePageState extends State<HomePage> {
 
   initSdk() {
     addLog("init ${initAppIdController.text}");
-    ZYTMediationSdk.initialize(initAppIdController.text, initAppKeyController.text,
+    ZYTMediationSdk.initialize(
+        initAppIdController.text, initAppKeyController.text,
         initCallBack: InitCallBack(
             onInitSuccess: () => addLog("init success"),
             onInitFailure: () => addLog("init failure")));
@@ -325,19 +326,29 @@ class HomePageState extends State<HomePage> {
         }));
   }
 
+  SplashAd splashAd;
+
   loadSplash() {
     addLog("load splash ${splashEditController.text}");
-    Splash.load(
-        splashEditController.text,
-        SplashCallBack(onAdShow: (adUnitId) {
-          addLog("interstitial show success $adUnitId");
-        }, onError: (adUnitId, errMsg) {
-          addLog("interstitial error $adUnitId,$errMsg");
-        }, onAdClick: (adUnitId) {
-          addLog("interstitial click $adUnitId");
-        }, onClose: (adUnitId) {
-          addLog("interstitial close $adUnitId");
-        }));
+    splashAd = SplashAd.newInstance(splashEditController.text);
+    splashAd.splashCallBack =
+        SplashCallBack(onSplashLoaded: (String adUnitId, SplashAd splashAd) {
+      addLog("splash loaded $adUnitId");
+    }, onAdShow: (adUnitId) {
+      addLog("splash show $adUnitId");
+    }, onError: (adUnitId, errMsg) {
+      addLog("splash error $adUnitId,$errMsg");
+    }, onAdClick: (adUnitId) {
+      addLog("splash click $adUnitId");
+    }, onClose: (adUnitId) {
+      addLog("splash close $adUnitId");
+    });
+    splashAd.load();
+  }
+
+  showSplash() {
+    addLog("show splash");
+    splashAd?.show();
   }
 
   isReadyInterstitial() {

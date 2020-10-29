@@ -39,6 +39,14 @@ class HomePageState extends State<HomePage> {
             buildNativeWidget(),
             buildBannerWidget(),
             buildSplashWidget(),
+            RaisedButton(
+              child: Text("clear log"),
+              onPressed: () {
+                setState(() {
+                  list.clear();
+                });
+              },
+            ),
             buildLogListWidget(),
           ],
         ),
@@ -138,19 +146,15 @@ class HomePageState extends State<HomePage> {
         ),
         RaisedButton(
           onPressed: () => loadSplash(),
-          child: Text("load splash"),
+          child: Text("loadSplash"),
         ),
         RaisedButton(
           onPressed: () => showSplash(),
-          child: Text("show splash"),
+          child: Text("showSplash"),
         ),
         RaisedButton(
-          child: Text("clear log"),
-          onPressed: () {
-            setState(() {
-              list.clear();
-            });
-          },
+          onPressed: () => loadAndSplash(),
+          child: Text("loadShowSplash"),
         )
       ],
     );
@@ -349,6 +353,25 @@ class HomePageState extends State<HomePage> {
   showSplash() {
     addLog("show splash");
     splashAd?.show();
+  }
+
+  loadAndSplash() {
+    addLog("load splash ${splashEditController.text}");
+    splashAd = SplashAd.newInstance(splashEditController.text);
+    splashAd.splashCallBack =
+        SplashCallBack(onSplashLoaded: (String adUnitId, SplashAd splashAd) {
+      addLog("splash loaded $adUnitId");
+      splashAd.show();
+    }, onAdShow: (adUnitId) {
+      addLog("splash show $adUnitId");
+    }, onError: (adUnitId, errMsg) {
+      addLog("splash error $adUnitId,$errMsg");
+    }, onAdClick: (adUnitId) {
+      addLog("splash click $adUnitId");
+    }, onClose: (adUnitId) {
+      addLog("splash close $adUnitId");
+    });
+    splashAd.load();
   }
 
   isReadyInterstitial() {

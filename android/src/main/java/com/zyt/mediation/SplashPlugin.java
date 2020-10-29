@@ -71,6 +71,7 @@ public class SplashPlugin extends BasePlugin {
 
             @Override
             public void onAdShow() {
+                splashAdResponses.remove(channelId);
                 if (finalAdChannel != null) {
                     finalAdChannel.invokeMethod(C_SPLASH_ON_AD_SHOW, MapBuilder.of(A_AD_UNIT_ID, adUnitId));
                 }
@@ -78,6 +79,7 @@ public class SplashPlugin extends BasePlugin {
 
             @Override
             public void onAdDismiss() {
+                splashAdResponses.remove(channelId);
                 removeView(parentViewGroup);
 
                 if (finalAdChannel != null) {
@@ -94,6 +96,7 @@ public class SplashPlugin extends BasePlugin {
 
             @Override
             public void onError(String s, String s1) {
+                splashAdResponses.remove(channelId);
                 removeView(parentViewGroup);
                 if (finalAdChannel != null) {
                     Map<String, String> argMap = new MapBuilder<String, String>()

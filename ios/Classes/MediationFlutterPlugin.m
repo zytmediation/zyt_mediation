@@ -47,8 +47,6 @@
                         pubkey:(NSString *)pubKey
                  flutterResult:(FlutterResult)result
 {
-    [ZYTSDK setLogLevel:ZYTLogLevelDebug];
-    
     [ZYTSDK initWithAppID:appid pubKey:pubKey completion:^(BOOL success) {
        
         

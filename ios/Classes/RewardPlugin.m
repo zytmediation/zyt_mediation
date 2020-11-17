@@ -122,7 +122,7 @@
     
     [channel invokeMethod:@"onError"
                 arguments:@{@"adUnitId":rewardedVideoAd.adUnitId,
-                            @"errMsg":error.description}];
+                            @"errMsg":error.description ? error.description : @"no fill"}];
 }
 
 - (void)rewardedVideoAdDidClick:(ZYTRewardedVideoAd *)rewardedVideoAd

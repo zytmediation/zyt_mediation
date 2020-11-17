@@ -31,7 +31,8 @@ static const NSString *kNativeViewName = @"nativeView";
 static const NSString *kNativePluginChannelName = @"/native";
 
 static const NSString *kSplashPluginName = @"/splash";
-static const NSString *kSplashLoadAndShowAd = @"loadAd";
+static const NSString *kSplashLoadAd = @"loadAd";
+static const NSString *kSplashShowAd = @"showAd";
 
 static const NSString *kAdUnitId = @"adUnitId";
 static const NSString *kAdWidth = @"width";

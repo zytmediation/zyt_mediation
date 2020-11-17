@@ -85,7 +85,7 @@
     
     [channel invokeMethod:@"onAdClose"
                 arguments:@{@"adUnitId":self.bannerAd.unitId,
-                            @"errMsg":error.description}];
+                            @"errMsg":error.description ? error.description : @"no fill"}];
 }
 
 

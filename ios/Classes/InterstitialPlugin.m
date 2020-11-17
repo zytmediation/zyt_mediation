@@ -118,7 +118,7 @@
 
     [channel invokeMethod:@"onError"
                 arguments:@{@"adUnitId":interstitialAd.adUnitId,
-                            @"errMsg":error.description
+                            @"errMsg":error.description ? error.description : @"no fill"
                 }];
 }
 

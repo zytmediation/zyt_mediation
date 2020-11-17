@@ -23,6 +23,11 @@
 
 @implementation PlatformNativeView
 
+- (void)dealloc
+{
+    NSLog(@"Native Dealloc");
+}
+
 -(instancetype)initWithWithFrame:(CGRect)frame
                   viewIdentifier:(int64_t)viewId
                        arguments:(id)args
@@ -30,7 +35,7 @@
 {
     self = [super init];
     if (self) {
-
+        
         self.viewId = @(viewId).stringValue;
         self.args = (NSDictionary *)args;
         self.messenger = messenger;
@@ -39,7 +44,7 @@
         NSNumber *height = self.args[kAdHeight];
         NSNumber *width = self.args[kAdWidth];
         
-        self.nativeAd = [[ZYTNativeAd alloc] initWithSlotKey:adUnitId size:CGSizeMake(height.doubleValue,width.doubleValue)];
+        self.nativeAd = [[ZYTNativeAd alloc] initWithSlotKey:adUnitId size:CGSizeMake(width.doubleValue,height.doubleValue)];
         self.nativeAd.delegate = self;
         [self.nativeAd loadNativeAd:1];
     }
@@ -56,7 +61,6 @@
 {
     if (!_containerView) {
         _containerView = [[UIView alloc] init];
-        _containerView.backgroundColor = [UIColor redColor];
     }
     return _containerView;
 }
@@ -97,7 +101,7 @@
     
     [channel invokeMethod:@"onError"
                 arguments:@{@"adUnitId":nativeExpressAd.adUnitId,
-                            @"errMsg":error.description}
+                            @"errMsg":error.description ? error.description : @"no fill"}
      ];
 }
 

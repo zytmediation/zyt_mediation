@@ -34,12 +34,14 @@
 
 -(void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result
 {
-    if ([kSplashLoadAndShowAd isEqual:call.method]) {
-        [self showSplashAdView:call];
+    if ([kSplashLoadAd isEqual:call.method]) {
+        [self loadSplashAdView:call];
+    } else if ([kSplashShowAd isEqual:call.method]) {
+        [self showSplashAd:call];
     }
 }
 
-- (void)showSplashAdView:(FlutterMethodCall *)call
+- (void)loadSplashAdView:(FlutterMethodCall *)call
 {
     NSString *adUnitId = call.arguments[@"adUnitId"];
     NSString *channelId = call.arguments[@"channelId"];
@@ -51,7 +53,17 @@
     self.splashAd = [[ZYTSplashAd alloc] initWithAdSlotKey:adUnitId];
     self.splashAd.delegate = self;
     self.splashAd.channelId = channelId;
-    [self.splashAd loadAdAndShowInWindow:[UIApplication sharedApplication].delegate.window];
+    [self.splashAd loadSplashAd];
+}
+
+- (void)showSplashAd:(FlutterMethodCall *)call
+{
+    if (!self.splashAd || !self.splashAd.adValid) {
+        [self splashAd:self.splashAd didFailWithError:nil];
+        return;
+    }
+    
+    [self.splashAd showSplashAdUsingKeyWindow:[UIApplication sharedApplication].delegate.window];
 }
 
 #pragma mark - ZYTSplashAdDelegate
@@ -60,7 +72,7 @@
     FlutterMethodChannel *channel = [FlutterMethodChannel methodChannelWithName:[NSString stringWithFormat:@"%@%@%@",kMediationChannelName,kSplashPluginName,splashAd.channelId]
                                                                 binaryMessenger:[self.registrar messenger]];
 
-    [channel invokeMethod:@"onAdLoaded"
+    [channel invokeMethod:@"onSplashAdLoaded"
                 arguments:@{@"adUnitId":splashAd.adUnitId}];
 }
 
@@ -71,7 +83,7 @@
 
     [channel invokeMethod:@"onError"
                 arguments:@{@"adUnitId":splashAd.adUnitId,
-                            @"errMsg":error.description}];
+                            @"errMsg":error.description ? error.description : @"no fill"}];
 }
 
 -(void)splashAdDidClick:(ZYTSplashAd *)splashAd

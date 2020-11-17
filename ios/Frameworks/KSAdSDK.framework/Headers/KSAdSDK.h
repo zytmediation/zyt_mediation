@@ -17,8 +17,6 @@
 #import <KSAdSDK/KSRewardedVideoAd.h>
 #import <KSAdSDK/KSRewardedVideoModel.h>
 
-#import <KSAdSDK/KSInterstitialAd.h>
-
 #import <KSAdSDK/KSNativeAd.h>
 #import <KSAdSDK/KSMaterialMeta.h>
 #import <KSAdSDK/KSNativeAdsManager.h>

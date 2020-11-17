@@ -98,6 +98,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - for subclass
 - (void)callDelegates:(void(^)(id<KSAdBasePlayerViewDelegate> delegate))callBlock;
 
+- (void)captureCurrentFrameWithCallback:(void (^)(UIImage * _Nullable currentFrame))callback;
+
 @end
 
 NS_ASSUME_NONNULL_END

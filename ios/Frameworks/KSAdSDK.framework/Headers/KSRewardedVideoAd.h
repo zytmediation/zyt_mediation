@@ -10,17 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "KSVideoAd.h"
 
-/**
- * KSRewardedVideoAdRewardedType 已废弃
- */
-typedef NS_ENUM(NSInteger, KSRewardedVideoAdRewardedType) {
-    // 正常的激励视频，必须是视频播放完成才显示关闭按钮
-    KSRewardedVideoAdRewardedTypeNormal                 =           1,
-    // 播放30秒，显示关闭按钮，并且有奖励，如果视频小于等于30秒，就是normal
-    KSRewardedVideoAdRewardedTypePlay30Second           =           2,
-};
-
-
 @class KSRewardedVideoModel;
 @protocol KSRewardedVideoAdDelegate;
 

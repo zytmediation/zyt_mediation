@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The delegate for receiving state change messages.
  The delegate is not limited to viewcontroller.
- The delegate can be set to any object which conforming to <BUNativeAdDelegate>.
+ The delegate can be set to any object which conforming to <KSNativeAdDelegate>.
  */
 @property (nonatomic, weak, readwrite, nullable) id<KSNativeAdDelegate> delegate;
 

@@ -15,11 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, copy) NSString *adUnitId;
 
+@property (nonatomic, assign) BOOL adValid;
+
 @property (nonatomic, weak, nullable) id<ZYTSplashAdDelegate> delegate;
 
 - (instancetype)initWithAdSlotKey:(NSString *)slotKey;
 
-- (void)loadAdAndShowInWindow:(UIWindow *)window;
+- (void)loadSplashAd;
+
+- (BOOL)showSplashAdUsingKeyWindow:(UIWindow *)keyWindow;
 
 @end
 

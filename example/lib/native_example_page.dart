@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:zyt_mediation/call_back.dart';
 import 'package:zyt_mediation/native.dart';
 import 'package:zyt_mediation/screen_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NativeExamplePage extends StatefulWidget {
   @override
@@ -23,41 +24,51 @@ class _NativeExampleState extends State<NativeExamplePage> {
   Widget build(BuildContext context) {
 //    jumpBottom();
     return Scaffold(
-      body: Column(
-        children: [
-          Row(children: [
+      body: SafeArea(
+        child: Column(
+          children: [
+            Row(children: [
+              Expanded(
+                  child: buildTextField(_widthEditController, hintText: "width")),
+              Expanded(
+                  child:
+                  buildTextField(_heightEditController, hintText: "height")),
+            ]),
+            Row(children: [
+              Expanded(child: buildTextField(_nativeEditController,hintText:"slotKey")),
+              RaisedButton(
+                onPressed: () => clearNative(),
+                child: Text("clear native"),
+              ),
+              RaisedButton(
+                onPressed: () => loadNative(),
+                child: Text("load native"),
+              ),
+              RaisedButton(
+                onPressed: () => performanceTest(),
+                child: Text("性能测试"),
+              )
+            ]),
             Expanded(
-                child: buildTextField(_widthEditController, hintText: "width")),
-            Expanded(
-                child:
-                    buildTextField(_heightEditController, hintText: "height")),
-          ]),
-          Row(children: [
-            Expanded(child: buildTextField(_nativeEditController)),
-            RaisedButton(
-              onPressed: () => clearNative(),
-              child: Text("clear native"),
-            ),
-            RaisedButton(
-              onPressed: () => loadNative(),
-              child: Text("load native"),
-            ),
-            RaisedButton(
-              onPressed: () => performanceTest(),
-              child: Text("性能测试"),
+              child:
+              list == null ? Container(color: Colors.white,) :
+              ListView.builder(
+                  controller: _controller,
+                  itemCount: list.length,
+                  itemBuilder: (_, index) {
+                    return list[index];
+                  }),
             )
-          ]),
-          Expanded(
-            child: ListView.builder(
-                controller: _controller,
-                itemCount: list.length,
-                itemBuilder: (_, index) {
-                  return list[index];
-                }),
-          )
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupCacheData();
   }
 
   Widget buildTextField(TextEditingController controller, {String hintText}) {
@@ -66,15 +77,54 @@ class _NativeExampleState extends State<NativeExamplePage> {
       maxLength: 10,
       maxLines: 1,
       inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
           counterText: '',
           hintText: hintText),
+      onSubmitted: (value) {
+        print("文本提交 ：$value");
+        setPreference(hintText, value);
+      },
     );
   }
 
-  loadNative() {
+  setPreference(String pKey, String pValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(pKey, pValue);
+  }
+
+  Future<String> getPreference(String pKey, String pValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(pKey);
+  }
+
+  setupCacheData() {
+    Future<String> slotKey = getPreference("slotKey", "");
+    slotKey.then((String value) {
+      setState(() {
+        _nativeEditController.text = value;
+      });
+    });
+
+    Future<String> width = getPreference("width", "");
+    width.then((String value) {
+      setState(() {
+        _widthEditController.text = value;
+      });
+    });
+
+    Future<String> height = getPreference("height", "");
+    height.then((String value) {
+      setState(() {
+        _heightEditController.text = value;
+      });
+    });
+
+  }
+
+
+    loadNative() {
     addLog("load native");
     double width, height;
     var wText = _widthEditController.text;
@@ -131,7 +181,7 @@ class _NativeExampleState extends State<NativeExamplePage> {
 
   clearNative() {
     setState(() {
-      list.clear();
+      list = null;
     });
   }
 

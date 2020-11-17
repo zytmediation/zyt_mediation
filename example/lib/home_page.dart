@@ -31,24 +31,27 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Column(
-          children: [
-            buildInitWidget(),
-            buildRewardWidget(),
-            buildInterstitialWidget(),
-            buildNativeWidget(),
-            buildBannerWidget(),
-            buildSplashWidget(),
-            RaisedButton(
-              child: Text("clear log"),
-              onPressed: () {
-                setState(() {
-                  list.clear();
-                });
-              },
-            ),
-            buildLogListWidget(),
-          ],
+        child: SafeArea(
+          child: Column(
+            children: [
+              buildInitWidget(),
+              buildRewardWidget(),
+              buildInterstitialWidget(),
+              buildNativeWidget(),
+              buildBannerWidget(),
+              buildSplashWidget(),
+              RaisedButton(
+                child: Text("clear log"),
+                onPressed: () {
+                  setState(() {
+                    list.clear();
+                  });
+                },
+              ),
+              buildLogListWidget(),
+            ],
+
+          ),
         ),
       ),
     );
@@ -138,26 +141,28 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget buildSplashWidget() {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          flex: 1,
-          child: buildTextField(splashEditController, "splash"),
-        ),
-        RaisedButton(
+        buildTextField(splashEditController, "splash"),
+        Row(
+        children: [
+          RaisedButton(
           onPressed: () => loadSplash(),
           child: Text("loadSplash"),
-        ),
-        RaisedButton(
+          ),
+          RaisedButton(
           onPressed: () => showSplash(),
           child: Text("showSplash"),
-        ),
-        RaisedButton(
+          ),
+          RaisedButton(
           onPressed: () => loadAndSplash(),
           child: Text("loadShowSplash"),
-        )
+          ),
+        ]),
       ],
     );
+
+
   }
 
   Widget buildLogListWidget() {

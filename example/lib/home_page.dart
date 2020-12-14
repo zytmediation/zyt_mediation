@@ -77,17 +77,26 @@ class HomePageState extends State<HomePage> {
         buildTextField(rewardEditController, "reward"),
         Row(
           children: [
-            RaisedButton(
-              onPressed: loadReward,
-              child: Text("load reward"),
+            Expanded(
+              flex: 1,
+              child: RaisedButton(
+                onPressed: loadReward,
+                child: Text("load reward"),
+              ),
             ),
-            RaisedButton(
-              onPressed: isReadyReward,
-              child: Text("isReady"),
+            Expanded(
+              flex: 1,
+              child: RaisedButton(
+                onPressed: isReadyReward,
+                child: Text("isReady"),
+              ),
             ),
-            RaisedButton(
-              onPressed: showReward,
-              child: Text("show reward"),
+            Expanded(
+              flex: 1,
+              child: RaisedButton(
+                onPressed: showReward,
+                child: Text("show reward"),
+              ),
             ),
           ],
         )
@@ -101,17 +110,26 @@ class HomePageState extends State<HomePage> {
         buildTextField(interstitialEditController, "interstitial"),
         Row(
           children: [
-            RaisedButton(
-              onPressed: () => loadInterstitial(),
-              child: Text("load interstitial"),
+            Expanded(
+              flex: 1,
+              child: RaisedButton(
+                onPressed: () => loadInterstitial(),
+                child: Text("load interstitial"),
+              ),
             ),
-            RaisedButton(
-              onPressed: () => isReadyInterstitial(),
-              child: Text("isReady"),
+            Expanded(
+              flex: 1,
+              child: RaisedButton(
+                onPressed: () => isReadyInterstitial(),
+                child: Text("isReady"),
+              ),
             ),
-            RaisedButton(
-              onPressed: () => showInterstitial(),
-              child: Text("show interstitial"),
+            Expanded(
+              flex: 1,
+              child: RaisedButton(
+                onPressed: () => showInterstitial(),
+                child: Text("show interstitial"),
+              ),
             ),
           ],
         ),
@@ -146,17 +164,26 @@ class HomePageState extends State<HomePage> {
         buildTextField(splashEditController, "splash"),
         Row(
         children: [
-          RaisedButton(
-          onPressed: () => loadSplash(),
-          child: Text("loadSplash"),
+          Expanded(
+            flex: 1,
+            child: RaisedButton(
+            onPressed: () => loadSplash(),
+            child: Text("loadSplash"),
+            ),
           ),
-          RaisedButton(
-          onPressed: () => showSplash(),
-          child: Text("showSplash"),
+          Expanded(
+            flex: 1,
+            child: RaisedButton(
+            onPressed: () => showSplash(),
+            child: Text("showSplash"),
+            ),
           ),
-          RaisedButton(
-          onPressed: () => loadAndSplash(),
-          child: Text("loadShowSplash"),
+          Expanded(
+            flex: 1,
+            child: RaisedButton(
+            onPressed: () => loadAndSplash(),
+            child: Text("loadShowSplash"),
+            ),
           ),
         ]),
       ],
@@ -215,14 +242,14 @@ class HomePageState extends State<HomePage> {
     Future<String> appid = getPreference("appid", "");
     appid.then((String value) {
       setState(() {
-        initAppIdController.text = value;
+        initAppIdController.text = '100196';
       });
     });
 
     Future<String> appkey = getPreference("appkey", "");
     appkey.then((String value) {
       setState(() {
-        initAppKeyController.text = value;
+        initAppKeyController.text = '7affd54e85edb19a8eb1530de069cfcc';
       });
     });
 
